@@ -10,6 +10,15 @@ function isWindow(obj) {
   /*eslint-enable eqeqeq */
 }
 
+function buffer(fn, ms) {
+  var timer;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(fn, ms);
+  };
+}
 
 class Align extends React.Component {
   constructor(props) {
@@ -20,18 +29,20 @@ class Align extends React.Component {
   componentDidMount() {
     var props = this.props;
     // parent ref not attached ....
-    setTimeout(() => {
-      align(React.findDOMNode(this), props.target(), props.align);
-    }, 0);
-
-    if (props.monitorWindowResize) {
-      this.startMonitorWindowResize();
+    if (!props.disabled) {
+      setTimeout(() => {
+        align(React.findDOMNode(this), props.target(), props.align);
+      }, 0);
+      if (props.monitorWindowResize) {
+        this.startMonitorWindowResize();
+      }
     }
   }
 
   startMonitorWindowResize() {
     if (!this.resizeHandler) {
-      this.resizeHandler = rcUtil.Dom.addEventListener(window, 'resize', this.handleWindowResize);
+      this.resizeHandler = rcUtil.Dom.addEventListener(window, 'resize',
+        buffer(this.handleWindowResize, this.props.monitorBufferTime));
     }
   }
 
@@ -44,7 +55,9 @@ class Align extends React.Component {
 
   handleWindowResize() {
     var props = this.props;
-    align(React.findDOMNode(this), props.target(), props.align);
+    if (!props.disabled) {
+      align(React.findDOMNode(this), props.target(), props.align);
+    }
   }
 
   componentWillUnmount() {
@@ -56,16 +69,18 @@ class Align extends React.Component {
     var props = this.props;
     var currentTarget;
 
-    if (prevProps.align !== props.align) {
-      reAlign = true;
-      currentTarget = props.target();
-    } else {
-      var lastTarget = prevProps.target();
-      currentTarget = props.target();
-      if (isWindow(lastTarget) && isWindow(currentTarget)) {
-        reAlign = false;
-      } else if (lastTarget !== currentTarget) {
+    if (!props.disabled) {
+      if (prevProps.disabled || prevProps.align !== props.align) {
         reAlign = true;
+        currentTarget = props.target();
+      } else {
+        var lastTarget = prevProps.target();
+        currentTarget = props.target();
+        if (isWindow(lastTarget) && isWindow(currentTarget)) {
+          reAlign = false;
+        } else if (lastTarget !== currentTarget) {
+          reAlign = true;
+        }
       }
     }
 
@@ -73,7 +88,7 @@ class Align extends React.Component {
       align(React.findDOMNode(this), currentTarget, props.align);
     }
 
-    if (props.monitorWindowResize) {
+    if (props.monitorWindowResize && !props.disabled) {
       this.startMonitorWindowResize();
     } else {
       this.stopMonitorWindowResize();
@@ -88,12 +103,18 @@ class Align extends React.Component {
 Align.defaultProps = {
   target() {
     return window;
-  }
+  },
+  monitorBufferTime: 50,
+  monitorWindowResize: false,
+  disabled: false
 };
 
 Align.PropTypes = {
   align: React.PropTypes.object.isRequired,
-  target: React.PropTypes.func
+  target: React.PropTypes.func,
+  monitorBufferTime: React.PropTypes.number,
+  monitorWindowResize: React.PropTypes.bool,
+  disabled: React.PropTypes.bool
 };
 
 export default Align;
