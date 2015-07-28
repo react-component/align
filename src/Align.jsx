@@ -31,7 +31,8 @@ class Align extends React.Component {
     // parent ref not attached ....
     if (!props.disabled) {
       this.hackRefTimer = setTimeout(() => {
-        align(React.findDOMNode(this), props.target(), props.align);
+        var source = React.findDOMNode(this);
+        props.onAlign(source, align(source, props.target(), props.align));
       }, 0);
       if (props.monitorWindowResize) {
         this.startMonitorWindowResize();
@@ -67,7 +68,8 @@ class Align extends React.Component {
   handleWindowResize() {
     var props = this.props;
     if (!props.disabled) {
-      align(React.findDOMNode(this), props.target(), props.align);
+      var source = React.findDOMNode(this);
+      props.onAlign(source, align(source, props.target(), props.align));
     }
   }
 
@@ -98,7 +100,8 @@ class Align extends React.Component {
       }
 
       if (reAlign) {
-        align(React.findDOMNode(this), currentTarget, props.align);
+        var source = React.findDOMNode(this);
+        props.onAlign(source, align(source, currentTarget, props.align));
       }
     }, 0);
 
@@ -118,6 +121,9 @@ Align.defaultProps = {
   target() {
     return window;
   },
+  onAlign() {
+
+  },
   monitorBufferTime: 50,
   monitorWindowResize: false,
   disabled: false
@@ -126,6 +132,7 @@ Align.defaultProps = {
 Align.PropTypes = {
   align: React.PropTypes.object.isRequired,
   target: React.PropTypes.func,
+  onAlign: React.PropTypes.func,
   monitorBufferTime: React.PropTypes.number,
   monitorWindowResize: React.PropTypes.bool,
   disabled: React.PropTypes.bool

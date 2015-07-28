@@ -76,6 +76,12 @@ will align child with target when mounted or align is changed
           <td>same with alignConfig from https://github.com/yiminghe/dom-align</td>
         </tr>
         <tr>
+          <td>onAlign</td>
+          <td>function(source:HTMLElement, align:Object)</td>
+          <td></td>
+          <td>called when align</td>
+        </tr>
+        <tr>
           <td>target</td>
           <td>function():HTMLElement</td>
           <td>function(){return window;}</td>
