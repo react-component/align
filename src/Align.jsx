@@ -30,13 +30,17 @@ class Align extends React.Component {
     var props = this.props;
     // parent ref not attached ....
     if (!props.disabled) {
-      setTimeout(() => {
+      this.hackRefTimer = setTimeout(() => {
         align(React.findDOMNode(this), props.target(), props.align);
       }, 0);
       if (props.monitorWindowResize) {
         this.startMonitorWindowResize();
       }
     }
+  }
+
+  componentWillReceiveProps() {
+    this.clearHackRefTimer();
   }
 
   startMonitorWindowResize() {
@@ -53,6 +57,13 @@ class Align extends React.Component {
     }
   }
 
+  clearHackRefTimer() {
+    if (this.hackRefTimer) {
+      clearTimeout(this.hackRefTimer);
+      this.hackRefTimer = null;
+    }
+  }
+
   handleWindowResize() {
     var props = this.props;
     if (!props.disabled) {
@@ -62,6 +73,7 @@ class Align extends React.Component {
 
   componentWillUnmount() {
     this.stopMonitorWindowResize();
+    this.clearHackRefTimer();
   }
 
   componentDidUpdate(prevProps) {
@@ -69,24 +81,26 @@ class Align extends React.Component {
     var props = this.props;
     var currentTarget;
 
-    if (!props.disabled) {
-      if (prevProps.disabled || prevProps.align !== props.align) {
-        reAlign = true;
-        currentTarget = props.target();
-      } else {
-        var lastTarget = prevProps.target();
-        currentTarget = props.target();
-        if (isWindow(lastTarget) && isWindow(currentTarget)) {
-          reAlign = false;
-        } else if (lastTarget !== currentTarget) {
+    this.hackRefTimer = setTimeout(() => {
+      if (!props.disabled) {
+        if (prevProps.disabled || prevProps.align !== props.align) {
           reAlign = true;
+          currentTarget = props.target();
+        } else {
+          var lastTarget = prevProps.target();
+          currentTarget = props.target();
+          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+            reAlign = false;
+          } else if (lastTarget !== currentTarget) {
+            reAlign = true;
+          }
         }
       }
-    }
 
-    if (reAlign) {
-      align(React.findDOMNode(this), currentTarget, props.align);
-    }
+      if (reAlign) {
+        align(React.findDOMNode(this), currentTarget, props.align);
+      }
+    }, 0);
 
     if (props.monitorWindowResize && !props.disabled) {
       this.startMonitorWindowResize();
