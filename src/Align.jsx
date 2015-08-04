@@ -81,20 +81,32 @@ class Align extends React.Component {
   componentDidUpdate(prevProps) {
     var reAlign = false;
     var props = this.props;
+    var self = this;
     var currentTarget;
 
     this.hackRefTimer = setTimeout(() => {
       if (!props.disabled) {
+        currentTarget = props.target();
         if (prevProps.disabled || prevProps.align !== props.align) {
           reAlign = true;
-          currentTarget = props.target();
         } else {
-          var lastTarget = prevProps.target();
-          currentTarget = props.target();
-          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+          var prevTarget = prevProps.target();
+          if (isWindow(prevTarget) && isWindow(currentTarget)) {
             reAlign = false;
-          } else if (lastTarget !== currentTarget) {
+          } else if (prevTarget !== currentTarget) {
             reAlign = true;
+          } else if (prevTarget === currentTarget) {
+            var currentTargetClientRect = currentTarget.getBoundingClientRect();
+            // `rcUtil.shallowEqual` does not work here,
+            // for `top`, `right`, `bottom`, `left` are in the prototype of `ClientRect`.
+            if (self._prevTargetClientRect &&
+                (self._prevTargetClientRect.top !== currentTargetClientRect.top ||
+                 self._prevTargetClientRect.right !== currentTargetClientRect.right ||
+                 self._prevTargetClientRect.bottom !== currentTargetClientRect.bottom ||
+                 self._prevTargetClientRect.left !== currentTargetClientRect.left)) {
+              reAlign = true;
+            }
+            self._prevTargetClientRect = currentTargetClientRect;
           }
         }
       }
