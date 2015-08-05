@@ -12,6 +12,11 @@ var Test = React.createClass({
       monitor:true,
       align: {
         points: ['cc', 'cc']
+      },
+      containerStyle: {
+        width:'80%',
+        height:500,
+        border:'1px solid red'
       }
     }
   },
@@ -32,6 +37,17 @@ var Test = React.createClass({
     })
   },
 
+  componentDidMount() {
+    var counter = 0;
+    var self = this;
+    setInterval(function () {
+      var width = (counter++ % 2) === 1 ? '50%': '80%';
+      self.setState({
+        containerStyle: assign({}, self.state.containerStyle, {width: width})
+      })
+    }, 1000);
+  },
+
   render(){
     return (<div style={{
       margin:50
@@ -44,11 +60,7 @@ var Test = React.createClass({
       <div
         ref="container"
 
-        style={{
-    width:'80%',
-    height:500,
-    border:'1px solid red'
-    }}>
+        style={this.state.containerStyle}>
         <Align
           target={this.getTarget}
           monitorWindowResize={this.state.monitor}
