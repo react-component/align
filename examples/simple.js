@@ -9,7 +9,7 @@ import assign from 'object-assign';
 var Test = React.createClass({
   getInitialState(){
     return {
-      monitor:true,
+      monitor: true,
       align: {
         points: ['cc', 'cc']
       }
@@ -23,12 +23,17 @@ var Test = React.createClass({
   },
 
   getTarget(){
-    return React.findDOMNode(this.refs.container);
+    var ref = React.findDOMNode(this.refs.container);
+    if (!ref) {
+      // parent ref not attached
+      ref = document.getElementById("container");
+    }
+    return ref;
   },
 
   toggleMonitor(){
     this.setState({
-      monitor:!this.state.monitor
+      monitor: !this.state.monitor
     })
   },
 
@@ -38,12 +43,12 @@ var Test = React.createClass({
     }}>
       <p>
         <button onClick={this.forceAlign}>force align</button>
-&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;
         <button onClick={this.toggleMonitor}>toggle monitor</button>
       </p>
       <div
         ref="container"
-
+        id="container"
         style={{
     width:'80%',
     height:500,
