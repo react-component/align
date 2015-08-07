@@ -49,7 +49,12 @@ webpackJsonp([0,1],[
 	  },
 	
 	  getTarget: function getTarget() {
-	    return _react2['default'].findDOMNode(this.refs.container);
+	    var ref = _react2['default'].findDOMNode(this.refs.container);
+	    if (!ref) {
+	      // parent ref not attached
+	      ref = document.getElementById("container");
+	    }
+	    return ref;
 	  },
 	
 	  toggleMonitor: function toggleMonitor() {
@@ -83,7 +88,7 @@ webpackJsonp([0,1],[
 	        'div',
 	        {
 	          ref: "container",
-	
+	          id: "container",
 	          style: {
 	            width: '80%',
 	            height: 500,
@@ -214,24 +219,15 @@ webpackJsonp([0,1],[
 	  _createClass(Align, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this = this;
-	
 	      var props = this.props;
-	      // parent ref not attached ....
+	      // if parent ref not attached .... use document.getElementById
 	      if (!props.disabled) {
-	        this.hackRefTimer = setTimeout(function () {
-	          var source = _react2['default'].findDOMNode(_this);
-	          props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
-	        }, 0);
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
 	        if (props.monitorWindowResize) {
 	          this.startMonitorWindowResize();
 	        }
 	      }
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps() {
-	      this.clearHackRefTimer();
 	    }
 	  }, {
 	    key: 'startMonitorWindowResize',
@@ -249,14 +245,6 @@ webpackJsonp([0,1],[
 	      }
 	    }
 	  }, {
-	    key: 'clearHackRefTimer',
-	    value: function clearHackRefTimer() {
-	      if (this.hackRefTimer) {
-	        clearTimeout(this.hackRefTimer);
-	        this.hackRefTimer = null;
-	      }
-	    }
-	  }, {
 	    key: 'handleWindowResize',
 	    value: function handleWindowResize() {
 	      var props = this.props;
@@ -269,38 +257,33 @@ webpackJsonp([0,1],[
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      this.stopMonitorWindowResize();
-	      this.clearHackRefTimer();
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate(prevProps) {
-	      var _this2 = this;
-	
 	      var reAlign = false;
 	      var props = this.props;
 	      var currentTarget;
 	
-	      this.hackRefTimer = setTimeout(function () {
-	        if (!props.disabled) {
-	          if (prevProps.disabled || prevProps.align !== props.align) {
+	      if (!props.disabled) {
+	        if (prevProps.disabled || prevProps.align !== props.align) {
+	          reAlign = true;
+	          currentTarget = props.target();
+	        } else {
+	          var lastTarget = prevProps.target();
+	          currentTarget = props.target();
+	          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+	            reAlign = false;
+	          } else if (lastTarget !== currentTarget) {
 	            reAlign = true;
-	            currentTarget = props.target();
-	          } else {
-	            var lastTarget = prevProps.target();
-	            currentTarget = props.target();
-	            if (isWindow(lastTarget) && isWindow(currentTarget)) {
-	              reAlign = false;
-	            } else if (lastTarget !== currentTarget) {
-	              reAlign = true;
-	            }
 	          }
 	        }
+	      }
 	
-	        if (reAlign) {
-	          var source = _react2['default'].findDOMNode(_this2);
-	          props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
-	        }
-	      }, 0);
+	      if (reAlign) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
+	      }
 	
 	      if (props.monitorWindowResize && !props.disabled) {
 	        this.startMonitorWindowResize();

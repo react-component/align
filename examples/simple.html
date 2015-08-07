@@ -234,83 +234,88 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>rc-align@1.2.0</h1>
+            <h1>rc-align@1.2.1</h1>
             <p>align ui component for react</p>
         </div>
         <div class="example" id="__react-content"></div>
         <script src="common.js?nowrap"></script>
         <script src="simple.js?nowrap"></script>
-        <div class="highlight"><pre><code><span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
-<span class="hljs-pi">'use strict'</span>;
+        <div class="highlight"><pre><code>// use jsx to render html, <span class="hljs-keyword">do</span> <span class="hljs-keyword">not</span> modify simple.html
+'use strict';
 
-<span class="hljs-keyword">import</span> Align <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-align'</span>;
-<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">import</span> rcUtil <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-util'</span>;
-<span class="hljs-keyword">import</span> assign <span class="hljs-keyword">from</span> <span class="hljs-string">'object-assign'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-type">Align</span> <span class="hljs-keyword">from</span> 'rc-align';
+<span class="hljs-keyword">import</span> <span class="hljs-type">React</span> <span class="hljs-keyword">from</span> 'react';
+<span class="hljs-keyword">import</span> rcUtil <span class="hljs-keyword">from</span> 'rc-util';
+<span class="hljs-keyword">import</span> assign <span class="hljs-keyword">from</span> '<span class="hljs-keyword">object</span>-assign';
 
-<span class="hljs-keyword">var</span> Test = React.createClass({
+<span class="hljs-keyword">var</span> <span class="hljs-type">Test</span> = <span class="hljs-type">React</span>.createClass({
   getInitialState(){
     <span class="hljs-keyword">return</span> {
-      monitor:<span class="hljs-literal">true</span>,
+      monitor: <span class="hljs-literal">true</span>,
       align: {
-        points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>]
+        points: ['cc', 'cc']
       }
     }
   },
 
   forceAlign(){
-    <span class="hljs-keyword">this</span>.setState({
-      align: assign({}, <span class="hljs-keyword">this</span>.state.align)
+    this.setState({
+      align: assign({}, this.state.align)
     });
   },
 
   getTarget(){
-    <span class="hljs-keyword">return</span> React.findDOMNode(<span class="hljs-keyword">this</span>.refs.container);
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">ref</span> = <span class="hljs-type">React</span>.findDOMNode(this.refs.container);
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">ref</span>) {
+      // parent <span class="hljs-keyword">ref</span> <span class="hljs-keyword">not</span> attached
+      <span class="hljs-keyword">ref</span> = document.getElementById(<span class="hljs-string">"container"</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">ref</span>;
   },
 
   toggleMonitor(){
-    <span class="hljs-keyword">this</span>.setState({
-      monitor:!<span class="hljs-keyword">this</span>.state.monitor
+    this.setState({
+      monitor: !this.state.monitor
     })
   },
 
   render(){
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-      <span class="hljs-attribute">margin:50</span>
-    }}&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.forceAlign}</span>&gt;</span>force align<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-&amp;nbsp;&amp;nbsp;&amp;nbsp;
-        <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleMonitor}</span>&gt;</span>toggle monitor<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span>
-        <span class="hljs-attribute">ref</span>=<span class="hljs-value">"container"</span>
-
-        <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-    <span class="hljs-attribute">width:</span>'<span class="hljs-attribute">80</span>%',
-    <span class="hljs-attribute">height:500</span>,
-    <span class="hljs-attribute">border:</span>'<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> <span class="hljs-attribute">red</span>'
-    }}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">Align</span>
-          <span class="hljs-attribute">target</span>=<span class="hljs-value">{this.getTarget}</span>
-          <span class="hljs-attribute">monitorWindowResize</span>=<span class="hljs-value">{this.state.monitor}</span>
-          <span class="hljs-attribute">align</span>=<span class="hljs-value">{this.state.align}</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-      <span class="hljs-attribute">position:</span>'<span class="hljs-attribute">absolute</span>',
-      <span class="hljs-attribute">width:50</span>,
-      <span class="hljs-attribute">height:50</span>,
-      <span class="hljs-attribute">background:</span>'<span class="hljs-attribute">yellow</span>'
-      }}&gt;</span>
+    <span class="hljs-keyword">return</span> (&lt;<span class="hljs-keyword">div</span> style={{
+      margin:<span class="hljs-number">50</span>
+    }}&gt;
+      &lt;p&gt;
+        &lt;button onClick={this.forceAlign}&gt;force align&lt;/button&gt;
+        &amp;nbsp;&amp;nbsp;&amp;nbsp;
+        &lt;button onClick={this.toggleMonitor}&gt;toggle monitor&lt;/button&gt;
+      &lt;/p&gt;
+      &lt;<span class="hljs-keyword">div</span>
+        <span class="hljs-keyword">ref</span>=<span class="hljs-string">"container"</span>
+        id=<span class="hljs-string">"container"</span>
+        style={{
+    width:'<span class="hljs-number">80</span>%',
+    height:<span class="hljs-number">500</span>,
+    border:'<span class="hljs-number">1</span>px solid red'
+    }}&gt;
+        &lt;<span class="hljs-type">Align</span>
+          target={this.getTarget}
+          monitorWindowResize={this.state.monitor}
+          align={this.state.align}&gt;
+          &lt;<span class="hljs-keyword">div</span> style={{
+      position:'absolute',
+      width:<span class="hljs-number">50</span>,
+      height:<span class="hljs-number">50</span>,
+      background:'yellow'
+      }}&gt;
             source
-          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">Align</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+          &lt;/<span class="hljs-keyword">div</span>&gt;
+        &lt;/<span class="hljs-type">Align</span>&gt;
+      &lt;/<span class="hljs-keyword">div</span>&gt;
+    &lt;/<span class="hljs-keyword">div</span>&gt;);
   }
 });
 
-React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Test</span> /&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre></div>
+<span class="hljs-type">React</span>.render(&lt;<span class="hljs-type">Test</span> /&gt;, document.getElementById('__react-content'));
+</code></pre></div>
     </div>
     <a href="http://github.com/react-component/align"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 </body>
