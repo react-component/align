@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import align from 'dom-align';
 import rcUtil from 'rc-util';
 
@@ -30,7 +31,7 @@ class Align extends React.Component {
     var props = this.props;
     // if parent ref not attached .... use document.getElementById
     if (!props.disabled) {
-      var source = React.findDOMNode(this);
+      var source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, props.target(), props.align));
       if (props.monitorWindowResize) {
         this.startMonitorWindowResize();
@@ -55,7 +56,7 @@ class Align extends React.Component {
   handleWindowResize() {
     var props = this.props;
     if (!props.disabled) {
-      var source = React.findDOMNode(this);
+      var source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, props.target(), props.align));
     }
   }
@@ -85,7 +86,7 @@ class Align extends React.Component {
     }
 
     if (reAlign) {
-      var source = React.findDOMNode(this);
+      var source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, currentTarget, props.align));
     }
 
