@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import align from 'dom-align';
 import {Dom} from 'rc-util';
 import isWindow from './isWindow';
@@ -41,7 +42,7 @@ const Align = React.createClass({
     const props = this.props;
     // if parent ref not attached .... use document.getElementById
     if (!props.disabled) {
-      const source = React.findDOMNode(this);
+      const source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, props.target(), props.align));
       if (props.monitorWindowResize) {
         this.startMonitorWindowResize();
@@ -70,7 +71,7 @@ const Align = React.createClass({
     }
 
     if (reAlign) {
-      const source = React.findDOMNode(this);
+      const source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, currentTarget, props.align));
     }
 
@@ -88,7 +89,7 @@ const Align = React.createClass({
   onWindowResize() {
     const props = this.props;
     if (!props.disabled) {
-      const source = React.findDOMNode(this);
+      const source = ReactDOM.findDOMNode(this);
       props.onAlign(source, align(source, props.target(), props.align));
     }
   },

@@ -3,6 +3,7 @@
 
 import Align from 'rc-align';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import rcUtil from 'rc-util';
 import assign from 'object-assign';
 
@@ -23,7 +24,7 @@ var Test = React.createClass({
   },
 
   getTarget(){
-    var ref = React.findDOMNode(this.refs.container);
+    var ref = this.refs.container;
     if (!ref) {
       // parent ref not attached
       ref = document.getElementById("container");
@@ -72,4 +73,4 @@ var Test = React.createClass({
   }
 });
 
-React.render(<Test />, document.getElementById('__react-content'));
+ReactDOM.render(<Test />, document.getElementById('__react-content'));
