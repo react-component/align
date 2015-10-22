@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import align from 'dom-align';
-import rcUtil from 'rc-util';
+import {Dom} from 'rc-util';
 import isWindow from './isWindow';
 
 function buffer(fn, ms) {
@@ -13,11 +13,29 @@ function buffer(fn, ms) {
   };
 }
 
-class Align extends React.Component {
-  constructor() {
-    super(...arguments);
-    this.onWindowResize = this.onWindowResize.bind(this);
-  }
+const Align = React.createClass({
+  propTypes: {
+    align: PropTypes.object.isRequired,
+    target: PropTypes.func,
+    onAlign: PropTypes.func,
+    monitorBufferTime: PropTypes.number,
+    monitorWindowResize: PropTypes.bool,
+    disabled: PropTypes.bool,
+    children: PropTypes.any,
+  },
+
+  getDefaultProps() {
+    return {
+      target() {
+        return window;
+      },
+      onAlign() {
+      },
+      monitorBufferTime: 50,
+      monitorWindowResize: false,
+      disabled: false,
+    };
+  },
 
   componentDidMount() {
     const props = this.props;
@@ -29,33 +47,7 @@ class Align extends React.Component {
         this.startMonitorWindowResize();
       }
     }
-  }
-
-  startMonitorWindowResize() {
-    if (!this.resizeHandler) {
-      this.resizeHandler = rcUtil.Dom.addEventListener(window, 'resize',
-        buffer(this.onWindowResize, this.props.monitorBufferTime));
-    }
-  }
-
-  stopMonitorWindowResize() {
-    if (this.resizeHandler) {
-      this.resizeHandler.remove();
-      this.resizeHandler = null;
-    }
-  }
-
-  onWindowResize() {
-    const props = this.props;
-    if (!props.disabled) {
-      const source = React.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
-    }
-  }
-
-  componentWillUnmount() {
-    this.stopMonitorWindowResize();
-  }
+  },
 
   componentDidUpdate(prevProps) {
     let reAlign = false;
@@ -87,31 +79,37 @@ class Align extends React.Component {
     } else {
       this.stopMonitorWindowResize();
     }
-  }
+  },
+
+  componentWillUnmount() {
+    this.stopMonitorWindowResize();
+  },
+
+  onWindowResize() {
+    const props = this.props;
+    if (!props.disabled) {
+      const source = React.findDOMNode(this);
+      props.onAlign(source, align(source, props.target(), props.align));
+    }
+  },
+
+  startMonitorWindowResize() {
+    if (!this.resizeHandler) {
+      this.resizeHandler = Dom.addEventListener(window, 'resize',
+        buffer(this.onWindowResize, this.props.monitorBufferTime));
+    }
+  },
+
+  stopMonitorWindowResize() {
+    if (this.resizeHandler) {
+      this.resizeHandler.remove();
+      this.resizeHandler = null;
+    }
+  },
 
   render() {
     return React.Children.only(this.props.children);
-  }
-}
-
-Align.defaultProps = {
-  target() {
-    return window;
   },
-  onAlign() {
-  },
-  monitorBufferTime: 50,
-  monitorWindowResize: false,
-  disabled: false,
-};
-
-Align.PropTypes = {
-  align: React.PropTypes.object.isRequired,
-  target: React.PropTypes.func,
-  onAlign: React.PropTypes.func,
-  monitorBufferTime: React.PropTypes.number,
-  monitorWindowResize: React.PropTypes.bool,
-  disabled: React.PropTypes.bool,
-};
+});
 
 export default Align;
