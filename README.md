@@ -49,8 +49,8 @@ online example: http://react-component.github.io/align/examples/
 
 ```js
 var Align = require('rc-align');
-var React = require('react');
-React.render(<Align align={{}} target={function(){}}><div></div></Align>, container);
+var ReactDOM = require('react-dom');
+ReactDOM.render(<Align align={{}} target={function(){}}><div></div></Align>, container);
 ```
 
 will align child with target when mounted or align is changed
