@@ -206,6 +206,7 @@ webpackJsonp([0,1],[
 	  displayName: 'Align',
 	
 	  propTypes: {
+	    childrenProps: _react.PropTypes.object,
 	    align: _react.PropTypes.object.isRequired,
 	    target: _react.PropTypes.func,
 	    onAlign: _react.PropTypes.func,
@@ -297,7 +298,21 @@ webpackJsonp([0,1],[
 	  },
 	
 	  render: function render() {
-	    return _react2['default'].Children.only(this.props.children);
+	    var _props = this.props;
+	    var childrenProps = _props.childrenProps;
+	    var children = _props.children;
+	
+	    var child = _react2['default'].Children.only(children);
+	    if (childrenProps) {
+	      var newProps = {};
+	      for (var prop in childrenProps) {
+	        if (childrenProps.hasOwnProperty(prop)) {
+	          newProps[prop] = this.props[childrenProps[prop]];
+	        }
+	      }
+	      return _react2['default'].cloneElement(child, newProps);
+	    }
+	    return child;
 	  }
 	});
 	
