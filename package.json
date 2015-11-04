@@ -34,8 +34,7 @@
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
     "browser-test": "rc-tools run browser-test",
-    "browser-test-cover": "rc-tools run browser-test-cover",
-    "validate": "npm ls"
+    "browser-test-cover": "rc-tools run browser-test-cover"
   },
   "devDependencies": {
     "expect.js": "0.3.x",

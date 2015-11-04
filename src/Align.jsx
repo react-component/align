@@ -16,6 +16,7 @@ function buffer(fn, ms) {
 
 const Align = React.createClass({
   propTypes: {
+    childrenProps: PropTypes.object,
     align: PropTypes.object.isRequired,
     target: PropTypes.func,
     onAlign: PropTypes.func,
@@ -109,13 +110,13 @@ const Align = React.createClass({
   },
 
   render() {
-    const {childrenProps,children} = this.props;
+    const {childrenProps, children} = this.props;
     const child = React.Children.only(children);
     if (childrenProps) {
       const newProps = {};
-      for (var p in childrenProps) {
-        if (childrenProps.hasOwnProperty(p)) {
-          newProps[p] = this.props[childrenProps[p]];
+      for (const prop in childrenProps) {
+        if (childrenProps.hasOwnProperty(prop)) {
+          newProps[prop] = this.props[childrenProps[prop]];
         }
       }
       return React.cloneElement(child, newProps);
