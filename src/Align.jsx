@@ -109,7 +109,18 @@ const Align = React.createClass({
   },
 
   render() {
-    return React.Children.only(this.props.children);
+    const {childrenProps,children} = this.props;
+    const child = React.Children.only(children);
+    if (childrenProps) {
+      const newProps = {};
+      for (var p in childrenProps) {
+        if (childrenProps.hasOwnProperty(p)) {
+          newProps[p] = this.props[childrenProps[p]];
+        }
+      }
+      return React.cloneElement(child, newProps);
+    }
+    return child;
   },
 });
 
