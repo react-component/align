@@ -43,8 +43,7 @@ const Align = React.createClass({
     const props = this.props;
     // if parent ref not attached .... use document.getElementById
     if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
+      this.align();
       if (props.monitorWindowResize) {
         this.startMonitorWindowResize();
       }
@@ -54,15 +53,13 @@ const Align = React.createClass({
   componentDidUpdate(prevProps) {
     let reAlign = false;
     const props = this.props;
-    let currentTarget;
 
     if (!props.disabled) {
       if (prevProps.disabled || prevProps.align !== props.align) {
         reAlign = true;
-        currentTarget = props.target();
       } else {
         const lastTarget = prevProps.target();
-        currentTarget = props.target();
+        const currentTarget = props.target();
         if (isWindow(lastTarget) && isWindow(currentTarget)) {
           reAlign = false;
         } else if (lastTarget !== currentTarget) {
@@ -72,8 +69,7 @@ const Align = React.createClass({
     }
 
     if (reAlign) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, currentTarget, props.align));
+      this.align();
     }
 
     if (props.monitorWindowResize && !props.disabled) {
@@ -87,11 +83,25 @@ const Align = React.createClass({
     this.stopMonitorWindowResize();
   },
 
+  align() {
+    const props = this.props;
+    const source = ReactDOM.findDOMNode(this);
+    // Avoid calculating position when source is animating, common cases in rc-animate
+    // it will cause wrong align position
+    const originalAnimation = source.style.animation;
+    const originalTransition = source.style.transition;
+    source.style.animation = 'none';
+    source.style.transition = 'none';
+    props.onAlign(source, align(source, props.target(), props.align));
+    // restore these css properties
+    source.style.animation = originalAnimation;
+    source.style.transition = originalTransition;
+  },
+
   onWindowResize() {
     const props = this.props;
     if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
+      this.align();
     }
   },
 
