@@ -1,7 +1,7 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import align from 'dom-align';
-import {Dom} from 'rc-util';
+import { Dom } from 'rc-util';
 import isWindow from './isWindow';
 
 function buffer(fn, ms) {
@@ -42,27 +42,22 @@ const Align = React.createClass({
   componentDidMount() {
     const props = this.props;
     // if parent ref not attached .... use document.getElementById
-    if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
-      if (props.monitorWindowResize) {
-        this.startMonitorWindowResize();
-      }
+    this.forceAlign();
+    if (!props.disabled && props.monitorWindowResize) {
+      this.startMonitorWindowResize();
     }
   },
 
   componentDidUpdate(prevProps) {
     let reAlign = false;
     const props = this.props;
-    let currentTarget;
 
     if (!props.disabled) {
       if (prevProps.disabled || prevProps.align !== props.align) {
         reAlign = true;
-        currentTarget = props.target();
       } else {
         const lastTarget = prevProps.target();
-        currentTarget = props.target();
+        const currentTarget = props.target();
         if (isWindow(lastTarget) && isWindow(currentTarget)) {
           reAlign = false;
         } else if (lastTarget !== currentTarget) {
@@ -72,8 +67,7 @@ const Align = React.createClass({
     }
 
     if (reAlign) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, currentTarget, props.align));
+      this.forceAlign();
     }
 
     if (props.monitorWindowResize && !props.disabled) {
@@ -87,18 +81,10 @@ const Align = React.createClass({
     this.stopMonitorWindowResize();
   },
 
-  onWindowResize() {
-    const props = this.props;
-    if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
-    }
-  },
-
   startMonitorWindowResize() {
     if (!this.resizeHandler) {
       this.resizeHandler = Dom.addEventListener(window, 'resize',
-        buffer(this.onWindowResize, this.props.monitorBufferTime));
+        buffer(this.forceAlign, this.props.monitorBufferTime));
     }
   },
 
@@ -109,8 +95,16 @@ const Align = React.createClass({
     }
   },
 
+  forceAlign() {
+    const props = this.props;
+    if (!props.disabled) {
+      const source = ReactDOM.findDOMNode(this);
+      props.onAlign(source, align(source, props.target(), props.align));
+    }
+  },
+
   render() {
-    const {childrenProps, children} = this.props;
+    const { childrenProps, children } = this.props;
     const child = React.Children.only(children);
     if (childrenProps) {
       const newProps = {};

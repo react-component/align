@@ -1,7 +1,8 @@
 const expect = require('expect.js');
 const Align = require('../');
-describe('rc-align', function () {
-  it('exists', function () {
+
+describe('rc-align', () => {
+  it('exists', () => {
     expect(Align).to.be.ok();
   });
 });
