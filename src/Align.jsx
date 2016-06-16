@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import align from 'dom-align';
-import { Dom } from 'rc-util';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isWindow from './isWindow';
 
 function buffer(fn, ms) {
@@ -83,7 +83,7 @@ const Align = React.createClass({
 
   startMonitorWindowResize() {
     if (!this.resizeHandler) {
-      this.resizeHandler = Dom.addEventListener(window, 'resize',
+      this.resizeHandler = addEventListener(window, 'resize',
         buffer(this.forceAlign, this.props.monitorBufferTime));
     }
   },
