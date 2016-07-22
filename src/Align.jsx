@@ -6,12 +6,22 @@ import isWindow from './isWindow';
 
 function buffer(fn, ms) {
   let timer;
-  return function bufferFn() {
+
+  function clear() {
     if (timer) {
       clearTimeout(timer);
+      timer = null;
     }
+  }
+
+  function bufferFn() {
+    clear();
     timer = setTimeout(fn, ms);
-  };
+  }
+
+  bufferFn.clear = clear;
+
+  return bufferFn;
 }
 
 const Align = React.createClass({
@@ -83,13 +93,14 @@ const Align = React.createClass({
 
   startMonitorWindowResize() {
     if (!this.resizeHandler) {
-      this.resizeHandler = addEventListener(window, 'resize',
-        buffer(this.forceAlign, this.props.monitorBufferTime));
+      this.bufferMonitor = buffer(this.forceAlign, this.props.monitorBufferTime);
+      this.resizeHandler = addEventListener(window, 'resize', this.bufferMonitor);
     }
   },
 
   stopMonitorWindowResize() {
     if (this.resizeHandler) {
+      this.bufferMonitor.clear();
       this.resizeHandler.remove();
       this.resizeHandler = null;
     }
