@@ -193,12 +193,22 @@ webpackJsonp([0,1],[
 	
 	function buffer(fn, ms) {
 	  var timer = void 0;
-	  return function bufferFn() {
+	
+	  function clear() {
 	    if (timer) {
 	      clearTimeout(timer);
+	      timer = null;
 	    }
+	  }
+	
+	  function bufferFn() {
+	    clear();
 	    timer = setTimeout(fn, ms);
-	  };
+	  }
+	
+	  bufferFn.clear = clear;
+	
+	  return bufferFn;
 	}
 	
 	var Align = _react2.default.createClass({
@@ -268,11 +278,13 @@ webpackJsonp([0,1],[
 	  },
 	  startMonitorWindowResize: function startMonitorWindowResize() {
 	    if (!this.resizeHandler) {
-	      this.resizeHandler = (0, _addEventListener2.default)(window, 'resize', buffer(this.forceAlign, this.props.monitorBufferTime));
+	      this.bufferMonitor = buffer(this.forceAlign, this.props.monitorBufferTime);
+	      this.resizeHandler = (0, _addEventListener2.default)(window, 'resize', this.bufferMonitor);
 	    }
 	  },
 	  stopMonitorWindowResize: function stopMonitorWindowResize() {
 	    if (this.resizeHandler) {
+	      this.bufferMonitor.clear();
 	      this.resizeHandler.remove();
 	      this.resizeHandler = null;
 	    }
