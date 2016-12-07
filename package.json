@@ -50,6 +50,6 @@
   ],
   "dependencies": {
     "dom-align": "1.x",
-    "rc-util": "3.x"
+    "rc-util": "4.x"
   }
 }
