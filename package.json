@@ -50,6 +50,7 @@
   ],
   "dependencies": {
     "dom-align": "1.x",
+    "prop-types": "15.x",
     "rc-util": "4.x"
   }
 }
