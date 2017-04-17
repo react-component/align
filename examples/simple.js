@@ -1,38 +1,37 @@
 import Align from 'rc-align';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import assign from 'object-assign';
 
-const Test = React.createClass({
-  getInitialState() {
-    return {
-      monitor: true,
-      align: {
-        points: ['cc', 'cc'],
-      },
-    };
-  },
+class Test extends Component {
+  state = {
+    monitor: true,
+    align: {
+      points: ['cc', 'cc'],
+    },
+  };
 
-  getTarget() {
+  getTarget = () => {
     let ref = this.refs.container;
     if (!ref) {
       // parent ref not attached
       ref = document.getElementById('container');
     }
     return ref;
-  },
+  }
 
-  toggleMonitor() {
+  toggleMonitor = () => {
     this.setState({
       monitor: !this.state.monitor,
     });
-  },
+  }
 
-  forceAlign() {
+  forceAlign = () => {
     this.setState({
       align: assign({}, this.state.align),
     });
-  },
+  }
+
   render() {
     return (
       <div
@@ -71,8 +70,9 @@ const Test = React.createClass({
             </div>
           </Align>
         </div>
-      </div>);
-  },
-});
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(<Test />, document.getElementById('__react-content'));
