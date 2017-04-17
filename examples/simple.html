@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-align@2.3.3</title>
+  <title>simple.js - example - rc-align@2.3.4</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,47 +263,46 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-align@2.3.3</h1>
+      <h1>rc-align@2.3.4</h1>
 
       <p>align ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
     <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> Align <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-align'</span>;
-<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 <span class="hljs-keyword">import</span> assign <span class="hljs-keyword">from</span> <span class="hljs-string">'object-assign'</span>;
 
-<span class="hljs-keyword">const</span> Test = React.createClass({
-  getInitialState() {
-    <span class="hljs-keyword">return</span> {
-      monitor: <span class="hljs-literal">true</span>,
-      align: {
-        points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>],
-      },
-    };
-  },
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  state = {
+    monitor: <span class="hljs-literal">true</span>,
+    align: {
+      points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>],
+    },
+  };
 
-  getTarget() {
+  getTarget = () =&gt; {
     <span class="hljs-keyword">let</span> ref = <span class="hljs-keyword">this</span>.refs.container;
     <span class="hljs-keyword">if</span> (!ref) {
       <span class="hljs-comment">// parent ref not attached</span>
       ref = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'container'</span>);
     }
     <span class="hljs-keyword">return</span> ref;
-  },
+  }
 
-  toggleMonitor() {
+  toggleMonitor = () =&gt; {
     <span class="hljs-keyword">this</span>.setState({
       monitor: !<span class="hljs-keyword">this</span>.state.monitor,
     });
-  },
+  }
 
-  forceAlign() {
+  forceAlign = () =&gt; {
     <span class="hljs-keyword">this</span>.setState({
       align: assign({}, <span class="hljs-keyword">this</span>.state.align),
     });
-  },
+  }
+
   render() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>
@@ -342,9 +341,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">Align</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
-  },
-});
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    )</span>;
+  }
+}
 
 ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Test</span> /&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
