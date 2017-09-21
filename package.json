@@ -9,7 +9,9 @@
     "align"
   ],
   "files": [
-    "lib"
+    "lib",
+    "es",
+    "dist"
   ],
   "homepage": "http://github.com/react-component/align",
   "author": "",
@@ -22,15 +24,19 @@
   },
   "licenses": "MIT",
   "main": "./lib/index",
+  "module": "./es/index",
   "config": {
     "port": 8100
   },
   "scripts": {
+    "dist": "rc-tools run dist",
+    "watch-tsc": "rc-tools run watch-tsc",
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
     "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
+    "compile": "rc-tools run compile --babel-runtime",
     "karma": "rc-test run karma",
     "saucelabs": "rc-test run saucelabs",
     "test": "rc-test run test",
@@ -38,8 +44,9 @@
     "coverage": "rc-test run coverage"
   },
   "devDependencies": {
+    "@types/react": "~16.0.2",
+    "@types/react-dom": "15.5.1",
     "expect.js": "0.3.x",
-    "object-assign": "4.x",
     "pre-commit": "1.x",
     "rc-tools": "6.x",
     "rc-test": "6.x",
@@ -49,9 +56,10 @@
   "pre-commit": [
     "lint"
   ],
+  "typings": "./lib/index.d.ts",
   "dependencies": {
+    "babel-runtime": "6.x",
     "dom-align": "1.x",
-    "prop-types": "^15.5.8",
     "rc-util": "4.x"
   }
 }
