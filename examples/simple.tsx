@@ -1,9 +1,8 @@
-import Align from 'rc-align';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import assign from 'object-assign';
+import Align from '../src/index';
 
-class Test extends Component {
+class Test extends Component<any, any> {
   state = {
     monitor: true,
     align: {
@@ -12,7 +11,7 @@ class Test extends Component {
   };
 
   getTarget = () => {
-    let ref = this.refs.container;
+    let ref: any = this.refs.container;
     if (!ref) {
       // parent ref not attached
       ref = document.getElementById('container');
@@ -28,7 +27,7 @@ class Test extends Component {
 
   forceAlign = () => {
     this.setState({
-      align: assign({}, this.state.align),
+      align: { ...this.state.align },
     });
   }
 

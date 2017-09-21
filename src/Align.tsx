@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import align from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
@@ -20,23 +19,22 @@ function buffer(fn, ms) {
     timer = setTimeout(fn, ms);
   }
 
-  bufferFn.clear = clear;
+  (bufferFn as any).clear = clear;
 
   return bufferFn;
 }
 
-class Align extends Component {
-  static propTypes = {
-    childrenProps: PropTypes.object,
-    align: PropTypes.object.isRequired,
-    target: PropTypes.func,
-    onAlign: PropTypes.func,
-    monitorBufferTime: PropTypes.number,
-    monitorWindowResize: PropTypes.bool,
-    disabled: PropTypes.bool,
-    children: PropTypes.any,
-  };
+export interface IAlignProps {
+  childrenProps?: {};
+  align: {};
+  target: () => void;
+  onAlign?: (source: any, align: any) => void;
+  monitorBufferTime?: number;
+  monitorWindowResize?: boolean;
+  disabled?: boolean;
+}
 
+class Align extends Component<IAlignProps, any> {
   static defaultProps = {
     target: () => window,
     onAlign: () => {},
@@ -44,6 +42,9 @@ class Align extends Component {
     monitorWindowResize: false,
     disabled: false,
   };
+
+  resizeHandler: any;
+  bufferMonitor: any;
 
   componentDidMount() {
     const props = this.props;
@@ -106,7 +107,7 @@ class Align extends Component {
     const props = this.props;
     if (!props.disabled) {
       const source = ReactDOM.findDOMNode(this);
-      props.onAlign(source, align(source, props.target(), props.align));
+      props.onAlign!(source, align(source, props.target(), props.align));
     }
   }
 
