@@ -9,7 +9,8 @@
     "align"
   ],
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "homepage": "http://github.com/react-component/align",
   "author": "",
@@ -22,14 +23,16 @@
   },
   "licenses": "MIT",
   "main": "./lib/index",
+  "module": "./es/index",
   "config": {
     "port": 8100
   },
   "scripts": {
     "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
-    "pub": "rc-tools run pub",
+    "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
     "karma": "rc-test run karma",
     "saucelabs": "rc-test run saucelabs",
@@ -43,7 +46,7 @@
     "object-assign": "4.x",
     "pre-commit": "1.x",
     "rc-test": "6.x",
-    "rc-tools": "6.x",
+    "rc-tools": "7.x",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },
@@ -51,8 +54,9 @@
     "lint"
   ],
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "dom-align": "1.x",
     "prop-types": "^15.5.8",
-    "rc-util": "4.x"
+    "rc-util": "^4.0.4"
   }
 }
