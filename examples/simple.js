@@ -1,7 +1,6 @@
 import Align from 'rc-align';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import assign from 'object-assign';
 
 class Test extends Component {
   state = {
@@ -28,7 +27,7 @@ class Test extends Component {
 
   forceAlign = () => {
     this.setState({
-      align: assign({}, this.state.align),
+      align: { ...this.state.align },
     });
   }
 

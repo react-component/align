@@ -43,7 +43,6 @@
   "devDependencies": {
     "core-js": "^2.5.1",
     "expect.js": "0.3.x",
-    "object-assign": "4.x",
     "pre-commit": "1.x",
     "rc-test": "6.x",
     "rc-tools": "7.x",
