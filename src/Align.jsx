@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import align from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
+import shallowequal from 'shallowequal';
 import isWindow from './isWindow';
 
 function buffer(fn, ms) {
@@ -59,7 +60,7 @@ class Align extends Component {
     const props = this.props;
 
     if (!props.disabled) {
-      if (prevProps.disabled || prevProps.align !== props.align) {
+      if (prevProps.disabled || !shallowequal(prevProps.align, props.align)) {
         reAlign = true;
       } else {
         const lastTarget = prevProps.target();

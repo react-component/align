@@ -56,6 +56,7 @@
     "babel-runtime": "^6.26.0",
     "dom-align": "1.x",
     "prop-types": "^15.5.8",
-    "rc-util": "^4.0.4"
+    "rc-util": "^4.0.4",
+    "shallowequal": "^1.0.2"
   }
 }
