@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-align@2.3.6 - align ui component for react</title>
+  <title>rc-align@2.4.0 - align ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,12 +737,14 @@
 
 <body>
 <div class="header">
-  <h1>rc-align@2.3.6</h1>
+  <h1>rc-align@2.4.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
+      
+      <li><a href="examples/point.html">point</a></li>
       
       <li><a href="examples/simple.html">simple</a></li>
       
@@ -794,9 +796,15 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
         </tr>
         <tr>
           <td>target</td>
-          <td>function():HTMLElement</td>
+          <td>
+              function():HTMLElement || 
+              { pageX: number, pageY: number } ||
+              { clientX: number, clientY: number }
+          </td>
           <td>function(){return window;}</td>
-          <td>a function which returned value is used for target from <a href="https://github.com/yiminghe/dom-align" title="null">https://github.com/yiminghe/dom-align</a></td>
+          <td>
+            a function which returned value or point is used for target from <a href="https://github.com/yiminghe/dom-align" title="null">https://github.com/yiminghe/dom-align</a>
+        </td>
         </tr>
         <tr>
           <td>monitorWindowResize</td>

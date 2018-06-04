@@ -1,14 +1,14 @@
-webpackJsonp([0],{
+webpackJsonp([1],{
 
-/***/ 128:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(129);
+module.exports = __webpack_require__(63);
 
 
 /***/ }),
 
-/***/ 129:
+/***/ 63:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31,108 +31,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var Test = function (_Component) {
-  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(Test, _Component);
+var align = {
+  points: ['cc', 'cc']
+};
 
-  function Test() {
+var Demo = function (_Component) {
+  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(Demo, _Component);
+
+  function Demo() {
     var _temp, _this, _ret;
 
-    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Test);
+    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Demo);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
     return _ret = (_temp = (_this = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {
-      monitor: true,
-      align: {
-        points: ['cc', 'cc']
-      }
-    }, _this.getTarget = function () {
-      if (!_this.$container) {
-        // parent ref not attached
-        _this.$container = document.getElementById('container');
-      }
-      return _this.$container;
-    }, _this.containerRef = function (ele) {
-      _this.$container = ele;
-    }, _this.alignRef = function (node) {
-      _this.$align = node;
-    }, _this.toggleMonitor = function () {
-      _this.setState({
-        monitor: !_this.state.monitor
-      });
-    }, _this.forceAlign = function () {
-      _this.$align.forceAlign();
+      point: null
+    }, _this.onClick = function (_ref) {
+      var pageX = _ref.pageX,
+          pageY = _ref.pageY;
+
+      _this.setState({ point: { pageX: pageX, pageY: pageY } });
     }, _temp), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(_this, _ret);
   }
 
-  Test.prototype.render = function render() {
+  Demo.prototype.render = function render() {
     return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
       'div',
-      {
-        style: {
-          margin: 50
-        }
-      },
-      __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-        'p',
-        null,
-        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-          'button',
-          { onClick: this.forceAlign },
-          'Force align'
-        ),
-        '\xA0\xA0\xA0',
-        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('input', { type: 'checkbox', checked: this.state.monitor, onChange: this.toggleMonitor }),
-          '\xA0 Monitor window resize'
-        )
-      ),
+      { style: { marginBottom: 170 } },
       __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
         {
-          ref: this.containerRef,
-          id: 'container',
-          style: {
-            width: '80%',
-            height: 500,
-            border: '1px solid red'
-          }
+          style: { margin: 20, border: '1px solid red', padding: '100px 0', textAlign: 'center' },
+          onClick: this.onClick
+        },
+        'Click this region please : )'
+      ),
+      __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_3_rc_align__["a" /* default */],
+        {
+          ref: this.alignRef,
+          target: this.state.point,
+          align: align
         },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_3_rc_align__["a" /* default */],
+          'div',
           {
-            ref: this.alignRef,
-            target: this.getTarget,
-            monitorWindowResize: this.state.monitor,
-            align: this.state.align
+            style: { position: 'absolute', width: 100, height: 100, background: 'rgba(0, 255, 0, 0.5)', pointerEvents: 'none' }
           },
-          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-            'div',
-            {
-              style: {
-                position: 'absolute',
-                width: 50,
-                height: 50,
-                background: 'yellow'
-              }
-            },
-            'source'
-          )
+          'Align'
         )
       )
     );
   };
 
-  return Test;
+  return Demo;
 }(__WEBPACK_IMPORTED_MODULE_4_react__["Component"]);
 
-__WEBPACK_IMPORTED_MODULE_5_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Test, null), document.getElementById('__react-content'));
+__WEBPACK_IMPORTED_MODULE_5_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Demo, null), document.getElementById('__react-content'));
 
 /***/ })
 
-},[128]);
-//# sourceMappingURL=simple.js.map
+},[62]);
+//# sourceMappingURL=point.js.map

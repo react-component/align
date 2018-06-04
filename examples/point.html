@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-align@2.4.0</title>
+  <title>point.js - example - rc-align@2.4.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -273,89 +273,45 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+<span class="hljs-keyword">const</span> align = {
+  points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>],
+};
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
   state = {
-    monitor: <span class="hljs-literal">true</span>,
-    align: {
-      points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>],
-    },
+    point: <span class="hljs-literal">null</span>,
   };
 
-  getTarget = () =&gt; {
-    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.$container) {
-      <span class="hljs-comment">// parent ref not attached</span>
-      <span class="hljs-keyword">this</span>.$container = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'container'</span>);
-    }
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$container;
-  }
-
-  containerRef = (ele) =&gt; {
-    <span class="hljs-keyword">this</span>.$container = ele;
-  }
-
-  alignRef = (node) =&gt; {
-    <span class="hljs-keyword">this</span>.$align = node;
-  }
-
-  toggleMonitor = () =&gt; {
-    <span class="hljs-keyword">this</span>.setState({
-      monitor: !<span class="hljs-keyword">this</span>.state.monitor,
-    });
-  }
-
-  forceAlign = () =&gt; {
-    <span class="hljs-keyword">this</span>.$align.forceAlign();
+  onClick = ({ pageX, pageY }) =&gt; {
+    <span class="hljs-keyword">this</span>.setState({ point: { pageX, pageY }});
   }
 
   render() {
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>
-        <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-          <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">50</span>,
-        }}
-      &gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.forceAlign}</span>&gt;</span>Force align<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-          &amp;nbsp;&amp;nbsp;&amp;nbsp;
-          <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">checked</span>=<span class="hljs-value">{this.state.monitor}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.toggleMonitor}</span> /&gt;</span>
-            &amp;nbsp;
-            Monitor window resize
-          <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">marginBottom:</span> <span class="hljs-attribute">170</span> }}&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span>
-          <span class="hljs-attribute">ref</span>=<span class="hljs-value">{this.containerRef}</span>
-          <span class="hljs-attribute">id</span>=<span class="hljs-value">"container"</span>
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-            <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">80</span>%',
-            <span class="hljs-attribute">height:</span> <span class="hljs-attribute">500</span>,
-            <span class="hljs-attribute">border:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> <span class="hljs-attribute">red</span>',
-          }}
+          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">20</span>, <span class="hljs-attribute">border:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> <span class="hljs-attribute">red</span>', <span class="hljs-attribute">padding:</span> '<span class="hljs-attribute">100px</span> <span class="hljs-attribute">0</span>', <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}
+          <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onClick}</span>
         &gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">Align</span>
-            <span class="hljs-attribute">ref</span>=<span class="hljs-value">{this.alignRef}</span>
-            <span class="hljs-attribute">target</span>=<span class="hljs-value">{this.getTarget}</span>
-            <span class="hljs-attribute">monitorWindowResize</span>=<span class="hljs-value">{this.state.monitor}</span>
-            <span class="hljs-attribute">align</span>=<span class="hljs-value">{this.state.align}</span>
-          &gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span>
-              <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
-                <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">absolute</span>',
-                <span class="hljs-attribute">width:</span> <span class="hljs-attribute">50</span>,
-                <span class="hljs-attribute">height:</span> <span class="hljs-attribute">50</span>,
-                <span class="hljs-attribute">background:</span> '<span class="hljs-attribute">yellow</span>',
-              }}
-            &gt;</span>
-              source
-            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">Align</span>&gt;</span>
+          Click this region please : )
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-title">Align</span>
+          <span class="hljs-attribute">ref</span>=<span class="hljs-value">{this.alignRef}</span>
+          <span class="hljs-attribute">target</span>=<span class="hljs-value">{this.state.point}</span>
+          <span class="hljs-attribute">align</span>=<span class="hljs-value">{align}</span>
+        &gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span>
+            <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">absolute</span>', <span class="hljs-attribute">width:</span> <span class="hljs-attribute">100</span>, <span class="hljs-attribute">height:</span> <span class="hljs-attribute">100</span>, <span class="hljs-attribute">background:</span> '<span class="hljs-attribute">rgba</span>(<span class="hljs-attribute">0</span>, <span class="hljs-attribute">255</span>, <span class="hljs-attribute">0</span>, <span class="hljs-attribute">0.5</span>)', <span class="hljs-attribute">pointerEvents:</span> '<span class="hljs-attribute">none</span>' }}
+          &gt;</span>Align<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">Align</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     )</span>;
   }
 }
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Test</span> /&gt;</span>, document.getElementById('__react-content'));
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
+
 </span></code></pre></div>
   </div>
   <a href="http://github.com/react-component/align">
@@ -366,7 +322,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
   </a>
   <script>FastClick.attach(document.body);</script>
   <script src="../common.js?nowrap"></script>
-  <script src="simple.js?nowrap"></script>
+  <script src="point.js?nowrap"></script>
 </body>
 
 </html>
