@@ -11,12 +11,19 @@ class Test extends Component {
   };
 
   getTarget = () => {
-    let ref = this.refs.container;
-    if (!ref) {
+    if (!this.$container) {
       // parent ref not attached
-      ref = document.getElementById('container');
+      this.$container = document.getElementById('container');
     }
-    return ref;
+    return this.$container;
+  }
+
+  containerRef = (ele) => {
+    this.$container = ele;
+  }
+
+  alignRef = (node) => {
+    this.$align = node;
   }
 
   toggleMonitor = () => {
@@ -26,9 +33,7 @@ class Test extends Component {
   }
 
   forceAlign = () => {
-    this.setState({
-      align: { ...this.state.align },
-    });
+    this.$align.forceAlign();
   }
 
   render() {
@@ -39,12 +44,16 @@ class Test extends Component {
         }}
       >
         <p>
-          <button onClick={this.forceAlign}>force align</button>
+          <button onClick={this.forceAlign}>Force align</button>
           &nbsp;&nbsp;&nbsp;
-          <button onClick={this.toggleMonitor}>toggle monitor</button>
+          <label>
+            <input type="checkbox" checked={this.state.monitor} onChange={this.toggleMonitor} />
+            &nbsp;
+            Monitor window resize
+          </label>
         </p>
         <div
-          ref="container"
+          ref={this.containerRef}
           id="container"
           style={{
             width: '80%',
@@ -53,6 +62,7 @@ class Test extends Component {
           }}
         >
           <Align
+            ref={this.alignRef}
             target={this.getTarget}
             monitorWindowResize={this.state.monitor}
             align={this.state.align}

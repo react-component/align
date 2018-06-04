@@ -116,11 +116,11 @@ class Align extends Component {
     const child = React.Children.only(children);
     if (childrenProps) {
       const newProps = {};
-      for (const prop in childrenProps) {
-        if (childrenProps.hasOwnProperty(prop)) {
-          newProps[prop] = this.props[childrenProps[prop]];
-        }
-      }
+      const propList = Object.keys(childrenProps);
+      propList.forEach((prop) => {
+        newProps[prop] = this.props[childrenProps[prop]];
+      });
+
       return React.cloneElement(child, newProps);
     }
     return child;
