@@ -43,18 +43,19 @@
   "devDependencies": {
     "core-js": "^2.5.1",
     "expect.js": "0.3.x",
+    "jquery": "^3.3.1",
     "pre-commit": "1.x",
     "rc-test": "6.x",
     "rc-tools": "8.x",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1"
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
   },
   "pre-commit": [
     "lint"
   ],
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "dom-align": "1.x",
+    "dom-align": "^1.7.0",
     "prop-types": "^15.5.8",
     "rc-util": "^4.0.4",
     "shallowequal": "^1.0.2"
