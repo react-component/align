@@ -88,9 +88,15 @@ will align child with target when mounted or align is changed
         </tr>
         <tr>
           <td>target</td>
-          <td>function():HTMLElement</td>
+          <td>
+              function():HTMLElement || 
+              { pageX: number, pageY: number } ||
+              { clientX: number, clientY: number }
+          </td>
           <td>function(){return window;}</td>
-          <td>a function which returned value is used for target from https://github.com/yiminghe/dom-align</td>
+          <td>
+            a function which returned value or point is used for target from https://github.com/yiminghe/dom-align
+        </td>
         </tr>
         <tr>
           <td>monitorWindowResize</td>
