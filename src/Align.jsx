@@ -71,8 +71,8 @@ class Align extends Component {
           reAlign = false;
         } else if (
           lastElement !== currentElement || // Element change
-          (!lastElement && currentPoint) || // Change from element to point
-          (!lastPoint && currentElement) || // Change from point to element
+          (lastElement && !currentElement && currentPoint) || // Change from element to point
+          (lastPoint && currentPoint && currentElement) || // Change from point to element
           (currentPoint && !isSamePoint(lastPoint, currentPoint))
         ) {
           reAlign = true;

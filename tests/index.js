@@ -13,3 +13,4 @@ describe('rc-align', () => {
 });
 
 require('./point.spec');
+require('./util.spec');

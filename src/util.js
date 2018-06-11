@@ -22,8 +22,15 @@ export function isSamePoint(prev, next) {
   if (prev === next) return true;
   if (!prev || !next) return false;
 
-  return (prev.pageX === next.pageX && prev.pageY === next.pageY) ||
-    (prev.clientX === next.clientX && prev.clientY === next.clientY);
+  if ('pageX' in next && 'pageY' in next) {
+    return prev.pageX === next.pageX && prev.pageY === next.pageY;
+  }
+
+  if ('clientX' in next && 'clientY' in next) {
+    return prev.clientX === next.clientX && prev.clientY === next.clientY;
+  }
+
+  return false;
 }
 
 export function isWindow(obj) {
