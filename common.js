@@ -3530,8 +3530,8 @@ var Align = function (_Component) {
           // Skip if is window
           reAlign = false;
         } else if (lastElement !== currentElement || // Element change
-        !lastElement && currentPoint || // Change from element to point
-        !lastPoint && currentElement || // Change from point to element
+        lastElement && !currentElement && currentPoint || // Change from element to point
+        lastPoint && currentPoint && currentElement || // Change from point to element
         currentPoint && !Object(__WEBPACK_IMPORTED_MODULE_9__util__["b" /* isSamePoint */])(lastPoint, currentPoint)) {
           reAlign = true;
         }
@@ -24407,7 +24407,15 @@ function isSamePoint(prev, next) {
   if (prev === next) return true;
   if (!prev || !next) return false;
 
-  return prev.pageX === next.pageX && prev.pageY === next.pageY || prev.clientX === next.clientX && prev.clientY === next.clientY;
+  if ('pageX' in next && 'pageY' in next) {
+    return prev.pageX === next.pageX && prev.pageY === next.pageY;
+  }
+
+  if ('clientX' in next && 'clientY' in next) {
+    return prev.clientX === next.clientX && prev.clientY === next.clientY;
+  }
+
+  return false;
 }
 
 function isWindow(obj) {
