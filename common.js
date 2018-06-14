@@ -3440,10 +3440,7 @@ $export($export.S, 'Object', { create: __webpack_require__(30) });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_dom_align__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_addEventListener__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_shallowequal__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_shallowequal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_shallowequal__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__util__ = __webpack_require__(127);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util__ = __webpack_require__(126);
 
 
 
@@ -3518,7 +3515,7 @@ var Align = function (_Component) {
     var props = this.props;
 
     if (!props.disabled) {
-      if (prevProps.disabled || !__WEBPACK_IMPORTED_MODULE_8_shallowequal___default()(prevProps.align, props.align)) {
+      if (prevProps.disabled) {
         reAlign = true;
       } else {
         var lastElement = getElement(prevProps.target);
@@ -3526,13 +3523,13 @@ var Align = function (_Component) {
         var lastPoint = getPoint(prevProps.target);
         var currentPoint = getPoint(props.target);
 
-        if (Object(__WEBPACK_IMPORTED_MODULE_9__util__["c" /* isWindow */])(lastElement) && Object(__WEBPACK_IMPORTED_MODULE_9__util__["c" /* isWindow */])(currentElement)) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_8__util__["c" /* isWindow */])(lastElement) && Object(__WEBPACK_IMPORTED_MODULE_8__util__["c" /* isWindow */])(currentElement)) {
           // Skip if is window
           reAlign = false;
         } else if (lastElement !== currentElement || // Element change
         lastElement && !currentElement && currentPoint || // Change from element to point
         lastPoint && currentPoint && currentElement || // Change from point to element
-        currentPoint && !Object(__WEBPACK_IMPORTED_MODULE_9__util__["b" /* isSamePoint */])(lastPoint, currentPoint)) {
+        currentPoint && !Object(__WEBPACK_IMPORTED_MODULE_8__util__["b" /* isSamePoint */])(lastPoint, currentPoint)) {
           reAlign = true;
         }
       }
@@ -3555,7 +3552,7 @@ var Align = function (_Component) {
 
   Align.prototype.startMonitorWindowResize = function startMonitorWindowResize() {
     if (!this.resizeHandler) {
-      this.bufferMonitor = Object(__WEBPACK_IMPORTED_MODULE_9__util__["a" /* buffer */])(this.forceAlign, this.props.monitorBufferTime);
+      this.bufferMonitor = Object(__WEBPACK_IMPORTED_MODULE_8__util__["a" /* buffer */])(this.forceAlign, this.props.monitorBufferTime);
       this.resizeHandler = Object(__WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_addEventListener__["a" /* default */])(window, 'resize', this.bufferMonitor);
     }
   };
@@ -24321,62 +24318,6 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 126 */
-/***/ (function(module, exports) {
-
-module.exports = function shallowEqual(objA, objB, compare, compareContext) {
-
-    var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
-
-    if(ret !== void 0) {
-        return !!ret;
-    }
-
-    if(objA === objB) {
-        return true;
-    }
-
-    if(typeof objA !== 'object' || !objA ||
-       typeof objB !== 'object' || !objB) {
-        return false;
-    }
-
-    var keysA = Object.keys(objA);
-    var keysB = Object.keys(objB);
-
-    if(keysA.length !== keysB.length) {
-        return false;
-    }
-
-    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-
-    // Test for A's keys different from B.
-    for(var idx = 0; idx < keysA.length; idx++) {
-
-        var key = keysA[idx];
-
-        if(!bHasOwnProperty(key)) {
-            return false;
-        }
-
-        var valueA = objA[key];
-        var valueB = objB[key];
-
-        ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
-
-        if(ret === false ||
-           ret === void 0 && valueA !== valueB) {
-            return false;
-        }
-
-    }
-
-    return true;
-
-};
-
-
-/***/ }),
-/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
