@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-import shallowequal from 'shallowequal';
 
 import { isWindow, buffer, isSamePoint } from './util';
 
@@ -58,7 +57,7 @@ class Align extends Component {
     const props = this.props;
 
     if (!props.disabled) {
-      if (prevProps.disabled || !shallowequal(prevProps.align, props.align)) {
+      if (prevProps.disabled) {
         reAlign = true;
       } else {
         const lastElement = getElement(prevProps.target);
