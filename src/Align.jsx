@@ -57,6 +57,9 @@ class Align extends Component {
     const props = this.props;
 
     if (!props.disabled) {
+      const source = ReactDOM.findDOMNode(this);
+      const sourceRect = source ? source.getBoundingClientRect() : null;
+
       if (prevProps.disabled) {
         reAlign = true;
       } else {
@@ -76,7 +79,15 @@ class Align extends Component {
         ) {
           reAlign = true;
         }
+
+        // If source element size changed
+        const preRect = this.sourceRect || {};
+        if (!reAlign && source && (preRect.width !== sourceRect.width || preRect.height !== sourceRect.height)) {
+          reAlign = true;
+        }
       }
+
+      this.sourceRect = sourceRect;
     }
 
     if (reAlign) {

@@ -12,5 +12,6 @@ describe('rc-align', () => {
   });
 });
 
+require('./element.spec');
 require('./point.spec');
 require('./util.spec');
