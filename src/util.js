@@ -36,3 +36,9 @@ export function isSamePoint(prev, next) {
 export function isWindow(obj) {
   return obj && typeof obj === 'object' && obj.window === obj;
 }
+
+export function isSimilarValue(val1, val2) {
+  const int1 = Math.floor(val1);
+  const int2 = Math.floor(val2);
+  return Math.abs(int1 - int2) <= 1;
+}

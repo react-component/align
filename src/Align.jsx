@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
-import { isWindow, buffer, isSamePoint } from './util';
+import { isWindow, buffer, isSamePoint, isSimilarValue } from './util';
 
 function getElement(func) {
   if (typeof func !== 'function' || !func) return null;
@@ -82,7 +82,11 @@ class Align extends Component {
 
         // If source element size changed
         const preRect = this.sourceRect || {};
-        if (!reAlign && source && (preRect.width !== sourceRect.width || preRect.height !== sourceRect.height)) {
+        if (
+          !reAlign &&
+          source &&
+          (!isSimilarValue(preRect.width, sourceRect.width) || !isSimilarValue(preRect.height, sourceRect.height))
+        ) {
           reAlign = true;
         }
       }
