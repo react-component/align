@@ -42,3 +42,18 @@ export function isSimilarValue(val1, val2) {
   const int2 = Math.floor(val2);
   return Math.abs(int1 - int2) <= 1;
 }
+
+export function restoreFocus(activeElement, container) {
+  let currentElement = activeElement;
+  while (currentElement) {
+    if (currentElement === container) {
+      break;
+    }
+    currentElement = currentElement.parentNode;
+  }
+
+  // Focus back if is in the container
+  if (currentElement) {
+    activeElement.focus();
+  }
+}
