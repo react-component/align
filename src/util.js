@@ -1,3 +1,5 @@
+import contains from 'rc-util/lib/Dom/contains';
+
 export function buffer(fn, ms) {
   let timer;
 
@@ -41,4 +43,14 @@ export function isSimilarValue(val1, val2) {
   const int1 = Math.floor(val1);
   const int2 = Math.floor(val2);
   return Math.abs(int1 - int2) <= 1;
+}
+
+export function restoreFocus(activeElement, container) {
+  // Focus back if is in the container
+  if (
+    activeElement !== document.activeElement &&
+    contains(container, activeElement)
+  ) {
+    activeElement.focus();
+  }
 }

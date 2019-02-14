@@ -5,10 +5,29 @@ import ReactDOM from 'react-dom';
 class Test extends Component {
   state = {
     monitor: true,
+    random: false,
+    randomWidth: 100,
     align: {
       points: ['cc', 'cc'],
     },
   };
+
+  componentDidMount() {
+    this.id = setInterval(() => {
+      const { random } = this.state;
+      if (random) {
+        this.setState({
+          randomWidth: 60 + 40 * Math.random(),
+        }, () => {
+          this.forceAlign();
+        });
+      }
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.id);
+  }
 
   getTarget = () => {
     if (!this.$container) {
@@ -32,11 +51,19 @@ class Test extends Component {
     });
   }
 
+  toggleRandom = () => {
+    this.setState({
+      random: !this.state.random,
+    });
+  }
+
   forceAlign = () => {
     this.$align.forceAlign();
   }
 
   render() {
+    const { random, randomWidth } = this.state;
+
     return (
       <div
         style={{
@@ -51,6 +78,11 @@ class Test extends Component {
             &nbsp;
             Monitor window resize
           </label>
+          <label>
+            <input type="checkbox" checked={this.state.random} onChange={this.toggleRandom} />
+            &nbsp;
+            Random Size
+          </label>
         </p>
         <div
           ref={this.containerRef}
@@ -59,6 +91,9 @@ class Test extends Component {
             width: '80%',
             height: 500,
             border: '1px solid red',
+            ...(random ? {
+              width: `${randomWidth}%`
+            } : null),
           }}
         >
           <Align
@@ -75,7 +110,10 @@ class Test extends Component {
                 background: 'yellow',
               }}
             >
-              source
+              <input
+                defaultValue="source"
+                style={{ width: '100%' }}
+              />
             </div>
           </Align>
         </div>

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
-import { isWindow, buffer, isSamePoint, isSimilarValue } from './util';
+import { isWindow, buffer, isSamePoint, isSimilarValue, restoreFocus } from './util';
 
 function getElement(func) {
   if (typeof func !== 'function' || !func) return null;
@@ -133,11 +133,17 @@ class Align extends Component {
       const element = getElement(target);
       const point = getPoint(target);
 
+      // IE lose focus after element realign
+      // We should record activeElement and restore later
+      const activeElement = document.activeElement;
+
       if (element) {
         result = alignElement(source, element, align);
       } else if (point) {
         result = alignPoint(source, point, align);
       }
+
+      restoreFocus(activeElement, source);
 
       if (onAlign) {
         onAlign(source, result);
