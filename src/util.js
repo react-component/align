@@ -46,12 +46,11 @@ export function isSimilarValue(val1, val2) {
 }
 
 export function restoreFocus(activeElement, container) {
-  if (!activeElement || activeElement === document.activeElement) {
-    return;
-  }
-
   // Focus back if is in the container
-  if (contains(container, activeElement)) {
+  if (
+    activeElement !== document.activeElement &&
+    contains(container, activeElement)
+  ) {
     activeElement.focus();
   }
 }
