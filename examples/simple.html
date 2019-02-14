@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-align@2.4.4</title>
+  <title>simple.js - example - rc-align@2.4.5</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-align@2.4.4</h1>
+      <h1>rc-align@2.4.5</h1>
 
       <p>align ui component for react</p>
     </div>
@@ -276,10 +276,29 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
   state = {
     monitor: <span class="hljs-literal">true</span>,
+    random: <span class="hljs-literal">false</span>,
+    randomWidth: <span class="hljs-number">100</span>,
     align: {
       points: [<span class="hljs-string">'cc'</span>, <span class="hljs-string">'cc'</span>],
     },
   };
+
+  componentDidMount() {
+    <span class="hljs-keyword">this</span>.id = setInterval(() =&gt; {
+      <span class="hljs-keyword">const</span> { random } = <span class="hljs-keyword">this</span>.state;
+      <span class="hljs-keyword">if</span> (random) {
+        <span class="hljs-keyword">this</span>.setState({
+          randomWidth: <span class="hljs-number">60</span> + <span class="hljs-number">40</span> * <span class="hljs-built_in">Math</span>.random(),
+        }, () =&gt; {
+          <span class="hljs-keyword">this</span>.forceAlign();
+        });
+      }
+    }, <span class="hljs-number">1000</span>);
+  }
+
+  componentWillUnmount() {
+    clearInterval(<span class="hljs-keyword">this</span>.id);
+  }
 
   getTarget = () =&gt; {
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.$container) {
@@ -303,11 +322,19 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     });
   }
 
+  toggleRandom = () =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      random: !<span class="hljs-keyword">this</span>.state.random,
+    });
+  }
+
   forceAlign = () =&gt; {
     <span class="hljs-keyword">this</span>.$align.forceAlign();
   }
 
   render() {
+    <span class="hljs-keyword">const</span> { random, randomWidth } = <span class="hljs-keyword">this</span>.state;
+
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>
         <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span>
@@ -322,6 +349,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             &amp;nbsp;
             Monitor window resize
           <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">checked</span>=<span class="hljs-value">{this.state.random}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.toggleRandom}</span> /&gt;</span>
+            &amp;nbsp;
+            Random Size
+          <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span>
           <span class="hljs-attribute">ref</span>=<span class="hljs-value">{this.containerRef}</span>
@@ -330,6 +362,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">80</span>%',
             <span class="hljs-attribute">height:</span> <span class="hljs-attribute">500</span>,
             <span class="hljs-attribute">border:</span> '<span class="hljs-attribute">1px</span> <span class="hljs-attribute">solid</span> <span class="hljs-attribute">red</span>',
+            <span class="hljs-attribute">...</span>(<span class="hljs-attribute">random</span> ? {
+              <span class="hljs-attribute">width:</span> `${<span class="hljs-attribute">randomWidth</span>}%`
+            } <span class="hljs-attribute">:</span> <span class="hljs-attribute">null</span>),
           }}
         &gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">Align</span>
@@ -346,7 +381,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
                 <span class="hljs-attribute">background:</span> '<span class="hljs-attribute">yellow</span>',
               }}
             &gt;</span>
-              source
+              <span class="hljs-tag">&lt;<span class="hljs-title">input</span>
+                <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">"source"</span>
+                <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> '<span class="hljs-attribute">100</span>%' }}
+              /&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">Align</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
