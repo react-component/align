@@ -143,9 +143,7 @@ class Align extends Component {
         result = alignPoint(source, point, align);
       }
 
-      if (activeElement && activeElement !== document.activeElement) {
-        restoreFocus(activeElement, source);
-      }
+      restoreFocus(activeElement, source);
 
       if (onAlign) {
         onAlign(source, result);
