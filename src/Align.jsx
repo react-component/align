@@ -145,6 +145,37 @@ class Align extends Component {
 
       restoreFocus(activeElement, source);
 
+      // get correct points
+      // in dom-align, points will be reset after failed match
+      // https://github.com/ant-design/ant-design/issues/14582
+      if (result.overflow.adjustX || result.overflow.adjustY) {
+        const sourceOffset = source.getBoundingClientRect();
+        const targetOffset = element.getBoundingClientRect();
+        const sourceCenter = {
+          left: sourceOffset.left + sourceOffset.width / 2,
+          top: sourceOffset.top + sourceOffset.height / 2,
+        };
+        const targetCenter = {
+          left: targetOffset.left + targetOffset.width / 2,
+          top: targetOffset.top + targetOffset.height / 2,
+        }
+        const ratio = (sourceCenter.left - targetCenter.left) / (sourceCenter.top - targetCenter.top);
+        if (ratio >= -1 || ratio <= 1) {
+          if (sourceCenter.top < targetCenter.top) {
+            result.points = ["bc", "tc"];
+          } else {
+            result.points = ["tc", "bc"];
+          }
+        } else {
+          /* eslint-disable-next-line */
+          if (sourceCenter.left < targetCenter.left) {
+            result.points = ["rc", "lc"];
+          } else {
+            result.points = ["lc", "rc"];
+          }
+        }
+      }
+
       if (onAlign) {
         onAlign(source, result);
       }
