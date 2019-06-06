@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
@@ -43,6 +42,11 @@ class Align extends Component {
     disabled: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.alignRef = React.createRef();
+  }
+
   componentDidMount() {
     const props = this.props;
     // if parent ref not attached .... use document.getElementById
@@ -57,7 +61,7 @@ class Align extends Component {
     const props = this.props;
 
     if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
+      const source = this.alignRef.current;
       const sourceRect = source ? source.getBoundingClientRect() : null;
 
       if (prevProps.disabled) {
@@ -127,7 +131,7 @@ class Align extends Component {
   forceAlign = () => {
     const { disabled, target, align, onAlign } = this.props;
     if (!disabled && target) {
-      const source = ReactDOM.findDOMNode(this);
+      const source = this.alignRef.current;
 
       let result;
       const element = getElement(target);
@@ -154,16 +158,13 @@ class Align extends Component {
   render() {
     const { childrenProps, children } = this.props;
     const child = React.Children.only(children);
-    if (childrenProps) {
-      const newProps = {};
-      const propList = Object.keys(childrenProps);
-      propList.forEach((prop) => {
-        newProps[prop] = this.props[childrenProps[prop]];
-      });
-
-      return React.cloneElement(child, newProps);
-    }
-    return child;
+    const newProps = {};
+    const propList = Object.keys(childrenProps || {});
+    propList.forEach((prop) => {
+      newProps[prop] = this.props[childrenProps[prop]];
+    });
+    newProps.ref = this.alignRef;
+    return React.cloneElement(child, newProps);
   }
 }
 
