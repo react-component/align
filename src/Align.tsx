@@ -33,7 +33,7 @@ export interface RefAlign {
 }
 
 function getElement(func: TargetType) {
-  if (typeof func !== 'function' || !func) return null;
+  if (typeof func !== 'function') return null;
   return func();
 }
 
