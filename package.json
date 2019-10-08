@@ -24,39 +24,37 @@
   "license": "MIT",
   "main": "./lib/index",
   "module": "./es/index",
-  "config": {
-    "port": 8100
-  },
   "scripts": {
-    "build": "rc-tools run build",
-    "compile": "rc-tools run compile --babel-runtime",
-    "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-tools run server",
-    "pub": "rc-tools run pub --babel-runtime",
-    "lint": "rc-tools run lint",
-    "karma": "rc-test run karma",
-    "saucelabs": "rc-test run saucelabs",
-    "test": "rc-test run test",
-    "chrome-test": "rc-test run chrome-test",
-    "coverage": "rc-test run coverage"
+    "start": "cross-env NODE_ENV=development father doc dev --storybook",
+    "build": "father doc build --storybook",
+    "compile": "father build",
+    "prepublishOnly": "npm run compile && np --no-cleanup --yolo --no-publish",
+    "lint": "eslint src/ examples/ --ext .tsx,.ts,.jsx,.js",
+    "test": "father test",
+    "coverage": "father test --coverage",
+    "now-build": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "dependencies": {
+    "classnames": "2.x",
+    "dom-align": "^1.7.0",
+    "rc-util": "^4.12.0",
+    "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
-    "core-js": "^2.5.1",
-    "expect.js": "0.3.x",
-    "jquery": "^3.3.1",
-    "pre-commit": "1.x",
-    "rc-test": "6.x",
-    "rc-tools": "8.x",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0"
-  },
-  "pre-commit": [
-    "lint"
-  ],
-  "dependencies": {
-    "babel-runtime": "^6.26.0",
-    "dom-align": "^1.7.0",
-    "prop-types": "^15.5.8",
-    "rc-util": "^4.0.4"
+    "@types/jest": "^24.0.18",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "@types/warning": "^3.0.0",
+    "cross-env": "^6.0.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
+    "father": "^2.13.2",
+    "np": "^5.0.3",
+    "typescript": "^3.5.2"
   }
 }
