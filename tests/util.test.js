@@ -29,7 +29,7 @@ describe('util', () => {
       ).toBeFalsy();
     });
 
-    it('by change', () => {
+    it('null should be false', () => {
       expect(isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null)).toBeFalsy();
       expect(isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 })).toBeFalsy();
     });
