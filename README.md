@@ -5,7 +5,7 @@ React Align Component. Wrapper around https://github.com/yiminghe/dom-align.
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
+[![Codecov][codecov-image]][codecov-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
@@ -14,8 +14,8 @@ React Align Component. Wrapper around https://github.com/yiminghe/dom-align.
 [npm-url]: http://npmjs.org/package/rc-align
 [travis-image]: https://img.shields.io/travis/react-component/align.svg?style=flat-square
 [travis-url]: https://travis-ci.org/react-component/align
-[coveralls-image]: https://img.shields.io/coveralls/react-component/align.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/align?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/align/master.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/react-component/align/branch/master
 [gemnasium-image]: http://img.shields.io/gemnasium/react-component/align.svg?style=flat-square
 [gemnasium-url]: https://gemnasium.com/react-component/align
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
