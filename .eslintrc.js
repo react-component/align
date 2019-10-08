@@ -5,5 +5,7 @@ module.exports = {
   rules: {
     ...base.rules,
     'react/no-find-dom-node': 0,
+    'jsx-a11y/label-has-associated-control': 0,
+    'jsx-a11y/label-has-for': 0,
   },
 };

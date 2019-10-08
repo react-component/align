@@ -6,12 +6,12 @@
 import React from 'react';
 import { composeRef } from 'rc-util/lib/ref';
 import findDOMNode from 'rc-util/lib/Dom/findDOMNode';
-import ResizeObserver from 'rc-resize-observer';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
-import { isWindow, buffer, isSamePoint, isSimilarValue, restoreFocus } from './util';
+import { isSamePoint, restoreFocus, monitorResize } from './util';
 import { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
+import useBuffer from './hooks/useBuffer';
 
 export interface AlignProps {
   align: AlignType;
@@ -21,6 +21,11 @@ export interface AlignProps {
   monitorWindowResize: boolean;
   disabled: boolean;
   children: React.ReactElement;
+}
+
+interface MonitorRef {
+  element?: HTMLElement;
+  cancel: () => void;
 }
 
 export interface RefAlign {
@@ -38,7 +43,7 @@ function getPoint(point: TargetType) {
 }
 
 const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
-  { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime },
+  { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime = 0 },
   ref,
 ) => {
   const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint }>({});
@@ -46,7 +51,9 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   let childNode = React.Children.only(children);
 
   // ===================== Align ======================
-  const forceAlign = () => {
+  const forceAlignRef = React.useRef<Function>();
+
+  forceAlignRef.current = () => {
     if (!disabled && target) {
       const source = findDOMNode<HTMLElement>(nodeRef.current);
 
@@ -75,32 +82,53 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
     }
   };
 
+  const [forceAlign, cancelForceAlign] = useBuffer(() => {
+    forceAlignRef.current();
+  }, monitorBufferTime);
+
   // ===================== Effect =====================
   // Listen for target updated
+  const resizeMonitor = React.useRef<MonitorRef>({
+    cancel: () => {},
+  });
   React.useEffect(() => {
     const element = getElement(target);
     const point = getPoint(target);
 
     if (cacheRef.current.element !== element || !isSamePoint(cacheRef.current.point, point)) {
       forceAlign();
+
+      // Add resize observer
+      if (resizeMonitor.current.element !== element) {
+        resizeMonitor.current.cancel();
+        resizeMonitor.current.element = element;
+        resizeMonitor.current.cancel = monitorResize(element, forceAlign);
+      }
     }
   });
 
   // Listen for window resize
-  const bufferRef = React.useRef<{ clear: Function }>();
   const resizeRef = React.useRef<{ remove: Function }>();
   React.useEffect(() => {
     if (monitorWindowResize) {
       if (!resizeRef.current) {
-        bufferRef.current = buffer(forceAlign, monitorBufferTime);
-        resizeRef.current = addEventListener(window, 'resize', bufferRef.current);
+        resizeRef.current = addEventListener(window, 'resize', forceAlign);
       }
     } else if (resizeRef.current) {
-      bufferRef.current.clear();
       resizeRef.current.remove();
       resizeRef.current = null;
     }
   }, [monitorWindowResize]);
+
+  // Clear all if unmount
+  React.useEffect(
+    () => () => {
+      resizeMonitor.current.cancel();
+      resizeRef.current.remove();
+      cancelForceAlign();
+    },
+    [],
+  );
 
   // ====================== Ref =======================
   React.useImperativeHandle(ref, () => ({
@@ -114,7 +142,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
     });
   }
 
-  return <ResizeObserver onResize={forceAlign}>{childNode}</ResizeObserver>;
+  return childNode;
 };
 
 const RefAlign = React.forwardRef(Align);

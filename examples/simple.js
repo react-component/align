@@ -48,15 +48,15 @@ class Test extends Component {
   };
 
   toggleMonitor = () => {
-    this.setState({
-      monitor: !this.state.monitor,
-    });
+    this.setState(({ monitor }) => ({
+      monitor: !monitor,
+    }));
   };
 
   toggleRandom = () => {
-    this.setState({
-      random: !this.state.random,
-    });
+    this.setState(({ random }) => ({
+      random: !random,
+    }));
   };
 
   forceAlign = () => {
@@ -73,7 +73,9 @@ class Test extends Component {
         }}
       >
         <p>
-          <button onClick={this.forceAlign}>Force align</button>
+          <button type="button" onClick={this.forceAlign}>
+            Force align
+          </button>
           &nbsp;&nbsp;&nbsp;
           <label>
             <input type="checkbox" checked={this.state.monitor} onChange={this.toggleMonitor} />
@@ -88,7 +90,8 @@ class Test extends Component {
           ref={this.containerRef}
           id="container"
           style={{
-            width: '80%',
+            // width: '80%',
+            maxWidth: 1000,
             height: 500,
             border: '1px solid red',
             ...(random

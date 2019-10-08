@@ -1,25 +1,6 @@
+import ResizeObserver from 'resize-observer-polyfill';
 import contains from 'rc-util/lib/Dom/contains';
 import { TargetPoint } from './interface';
-
-export function buffer(fn: Function, ms: number) {
-  let timer;
-
-  function clear() {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
-  }
-
-  function bufferFn() {
-    clear();
-    timer = setTimeout(fn, ms);
-  }
-
-  bufferFn.clear = clear;
-
-  return bufferFn;
-}
 
 export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
   if (prev === next) return true;
@@ -36,19 +17,36 @@ export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
   return false;
 }
 
-export function isWindow(obj) {
-  return obj && typeof obj === 'object' && obj.window === obj;
-}
-
-export function isSimilarValue(val1, val2) {
-  const int1 = Math.floor(val1);
-  const int2 = Math.floor(val2);
-  return Math.abs(int1 - int2) <= 1;
-}
-
 export function restoreFocus(activeElement, container) {
   // Focus back if is in the container
   if (activeElement !== document.activeElement && contains(container, activeElement)) {
     activeElement.focus();
   }
+}
+
+export function monitorResize(element: HTMLElement, callback: Function) {
+  let prevWidth: number = null;
+  let prevHeight: number = null;
+
+  function onResize([{ target }]: ResizeObserverEntry[]) {
+    const { width, height } = target.getBoundingClientRect();
+    const fixedWidth = Math.floor(width);
+    const fixedHeight = Math.floor(height);
+
+    if (prevWidth !== fixedWidth || prevHeight !== fixedHeight) {
+      callback({ width: fixedWidth, height: fixedHeight });
+    }
+
+    prevWidth = fixedWidth;
+    prevHeight = fixedHeight;
+  }
+
+  const resizeObserver = new ResizeObserver(onResize);
+  if (element) {
+    resizeObserver.observe(element);
+  }
+
+  return () => {
+    resizeObserver.disconnect();
+  };
 }

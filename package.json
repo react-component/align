@@ -40,7 +40,6 @@
   "dependencies": {
     "classnames": "2.x",
     "dom-align": "^1.7.0",
-    "rc-resize-observer": "^0.1.0",
     "rc-util": "^4.12.0",
     "resize-observer-polyfill": "^1.5.1"
   },
