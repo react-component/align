@@ -4,5 +4,6 @@ module.exports = {
   ...base,
   rules: {
     ...base.rules,
+    'react/no-find-dom-node': 0,
   },
 };

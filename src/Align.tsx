@@ -1,141 +1,65 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+/**
+ * Removed props:
+ *  - childrenProps
+ */
+
+import React from 'react';
+import { composeRef } from 'rc-util/lib/ref';
+import findDOMNode from 'rc-util/lib/Dom/findDOMNode';
+import ResizeObserver from 'rc-resize-observer';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
 import { isWindow, buffer, isSamePoint, isSimilarValue, restoreFocus } from './util';
+import { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
 
-function getElement(func) {
+export interface AlignProps {
+  align: AlignType;
+  target: TargetType;
+  onAlign: (source: HTMLElement, result: AlignResult) => void;
+  monitorBufferTime: number;
+  monitorWindowResize: boolean;
+  disabled: boolean;
+  children: React.ReactElement;
+}
+
+export interface RefAlign {
+  forceAlign: () => void;
+}
+
+function getElement(func: TargetType) {
   if (typeof func !== 'function' || !func) return null;
   return func();
 }
 
-function getPoint(point) {
+function getPoint(point: TargetType) {
   if (typeof point !== 'object' || !point) return null;
   return point;
 }
 
-class Align extends Component {
-  static propTypes = {
-    childrenProps: PropTypes.object,
-    align: PropTypes.object.isRequired,
-    target: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({
-        clientX: PropTypes.number,
-        clientY: PropTypes.number,
-        pageX: PropTypes.number,
-        pageY: PropTypes.number,
-      }),
-    ]),
-    onAlign: PropTypes.func,
-    monitorBufferTime: PropTypes.number,
-    monitorWindowResize: PropTypes.bool,
-    disabled: PropTypes.bool,
-    children: PropTypes.any,
-  };
+const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
+  { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime },
+  ref,
+) => {
+  const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint }>({});
+  const nodeRef = React.useRef();
+  let childNode = React.Children.only(children);
 
-  static defaultProps = {
-    target: () => window,
-    monitorBufferTime: 50,
-    monitorWindowResize: false,
-    disabled: false,
-  };
-
-  componentDidMount() {
-    const props = this.props;
-    // if parent ref not attached .... use document.getElementById
-    this.forceAlign();
-    if (!props.disabled && props.monitorWindowResize) {
-      this.startMonitorWindowResize();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    let reAlign = false;
-    const props = this.props;
-
-    if (!props.disabled) {
-      const source = ReactDOM.findDOMNode(this);
-      const sourceRect = source ? source.getBoundingClientRect() : null;
-
-      if (prevProps.disabled) {
-        reAlign = true;
-      } else {
-        const lastElement = getElement(prevProps.target);
-        const currentElement = getElement(props.target);
-        const lastPoint = getPoint(prevProps.target);
-        const currentPoint = getPoint(props.target);
-
-        if (isWindow(lastElement) && isWindow(currentElement)) {
-          // Skip if is window
-          reAlign = false;
-        } else if (
-          lastElement !== currentElement || // Element change
-          (lastElement && !currentElement && currentPoint) || // Change from element to point
-          (lastPoint && currentPoint && currentElement) || // Change from point to element
-          (currentPoint && !isSamePoint(lastPoint, currentPoint))
-        ) {
-          reAlign = true;
-        }
-
-        // If source element size changed
-        const preRect = this.sourceRect || {};
-        if (
-          !reAlign &&
-          source &&
-          (!isSimilarValue(preRect.width, sourceRect.width) || !isSimilarValue(preRect.height, sourceRect.height))
-        ) {
-          reAlign = true;
-        }
-      }
-
-      this.sourceRect = sourceRect;
-    }
-
-    if (reAlign) {
-      this.forceAlign();
-    }
-
-    if (props.monitorWindowResize && !props.disabled) {
-      this.startMonitorWindowResize();
-    } else {
-      this.stopMonitorWindowResize();
-    }
-  }
-
-  componentWillUnmount() {
-    this.stopMonitorWindowResize();
-  }
-
-  startMonitorWindowResize() {
-    if (!this.resizeHandler) {
-      this.bufferMonitor = buffer(this.forceAlign, this.props.monitorBufferTime);
-      this.resizeHandler = addEventListener(window, 'resize', this.bufferMonitor);
-    }
-  }
-
-  stopMonitorWindowResize() {
-    if (this.resizeHandler) {
-      this.bufferMonitor.clear();
-      this.resizeHandler.remove();
-      this.resizeHandler = null;
-    }
-  }
-
-  forceAlign = () => {
-    const { disabled, target, align, onAlign } = this.props;
+  // ===================== Align ======================
+  const forceAlign = () => {
     if (!disabled && target) {
-      const source = ReactDOM.findDOMNode(this);
+      const source = findDOMNode<HTMLElement>(nodeRef.current);
 
-      let result;
+      let result: AlignResult;
       const element = getElement(target);
       const point = getPoint(target);
 
+      cacheRef.current.element = element;
+      cacheRef.current.point = point;
+
       // IE lose focus after element realign
       // We should record activeElement and restore later
-      const activeElement = document.activeElement;
+      const { activeElement } = document;
 
       if (element) {
         result = alignElement(source, element, align);
@@ -149,22 +73,51 @@ class Align extends Component {
         onAlign(source, result);
       }
     }
-  }
+  };
 
-  render() {
-    const { childrenProps, children } = this.props;
-    const child = React.Children.only(children);
-    if (childrenProps) {
-      const newProps = {};
-      const propList = Object.keys(childrenProps);
-      propList.forEach((prop) => {
-        newProps[prop] = this.props[childrenProps[prop]];
-      });
+  // ===================== Effect =====================
+  // Listen for target updated
+  React.useEffect(() => {
+    const element = getElement(target);
+    const point = getPoint(target);
 
-      return React.cloneElement(child, newProps);
+    if (cacheRef.current.element !== element || !isSamePoint(cacheRef.current.point, point)) {
+      forceAlign();
     }
-    return child;
-  }
-}
+  });
 
-export default Align;
+  // Listen for window resize
+  const bufferRef = React.useRef<{ clear: Function }>();
+  const resizeRef = React.useRef<{ remove: Function }>();
+  React.useEffect(() => {
+    if (monitorWindowResize) {
+      if (!resizeRef.current) {
+        bufferRef.current = buffer(forceAlign, monitorBufferTime);
+        resizeRef.current = addEventListener(window, 'resize', bufferRef.current);
+      }
+    } else if (resizeRef.current) {
+      bufferRef.current.clear();
+      resizeRef.current.remove();
+      resizeRef.current = null;
+    }
+  }, [monitorWindowResize]);
+
+  // ====================== Ref =======================
+  React.useImperativeHandle(ref, () => ({
+    forceAlign,
+  }));
+
+  // ===================== Render =====================
+  if (React.isValidElement(childNode)) {
+    childNode = React.cloneElement(childNode, {
+      ref: composeRef((childNode as any).ref, nodeRef),
+    });
+  }
+
+  return <ResizeObserver onResize={forceAlign}>{childNode}</ResizeObserver>;
+};
+
+const RefAlign = React.forwardRef(Align);
+RefAlign.displayName = 'Align';
+
+export default RefAlign;

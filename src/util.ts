@@ -1,6 +1,7 @@
 import contains from 'rc-util/lib/Dom/contains';
+import { TargetPoint } from './interface';
 
-export function buffer(fn, ms) {
+export function buffer(fn: Function, ms: number) {
   let timer;
 
   function clear() {
@@ -20,7 +21,7 @@ export function buffer(fn, ms) {
   return bufferFn;
 }
 
-export function isSamePoint(prev, next) {
+export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
   if (prev === next) return true;
   if (!prev || !next) return false;
 
@@ -47,10 +48,7 @@ export function isSimilarValue(val1, val2) {
 
 export function restoreFocus(activeElement, container) {
   // Focus back if is in the container
-  if (
-    activeElement !== document.activeElement &&
-    contains(container, activeElement)
-  ) {
+  if (activeElement !== document.activeElement && contains(container, activeElement)) {
     activeElement.focus();
   }
 }
