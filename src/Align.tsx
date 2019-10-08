@@ -108,15 +108,15 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   });
 
   // Listen for window resize
-  const resizeRef = React.useRef<{ remove: Function }>();
+  const winResizeRef = React.useRef<{ remove: Function }>(null);
   React.useEffect(() => {
     if (monitorWindowResize) {
-      if (!resizeRef.current) {
-        resizeRef.current = addEventListener(window, 'resize', forceAlign);
+      if (!winResizeRef.current) {
+        winResizeRef.current = addEventListener(window, 'resize', forceAlign);
       }
-    } else if (resizeRef.current) {
-      resizeRef.current.remove();
-      resizeRef.current = null;
+    } else if (winResizeRef.current) {
+      winResizeRef.current.remove();
+      winResizeRef.current = null;
     }
   }, [monitorWindowResize]);
 
@@ -124,7 +124,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   React.useEffect(
     () => () => {
       resizeMonitor.current.cancel();
-      resizeRef.current.remove();
+      if (winResizeRef.current) winResizeRef.current.remove();
       cancelForceAlign();
     },
     [],
