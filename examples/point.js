@@ -1,6 +1,5 @@
-import Align from 'rc-align';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import Align from '../src';
 
 const align = {
   points: ['cc', 'cc'],
@@ -12,8 +11,8 @@ class Demo extends Component {
   };
 
   onClick = ({ pageX, pageY }) => {
-    this.setState({ point: { pageX, pageY }});
-  }
+    this.setState({ point: { pageX, pageY } });
+  };
 
   render() {
     return (
@@ -25,19 +24,22 @@ class Demo extends Component {
           Click this region please : )
         </div>
 
-        <Align
-          ref={this.alignRef}
-          target={this.state.point}
-          align={align}
-        >
+        <Align ref={this.alignRef} target={this.state.point} align={align}>
           <div
-            style={{ position: 'absolute', width: 100, height: 100, background: 'rgba(0, 255, 0, 0.5)', pointerEvents: 'none' }}
-          >Align</div>
+            style={{
+              position: 'absolute',
+              width: 100,
+              height: 100,
+              background: 'rgba(0, 255, 0, 0.5)',
+              pointerEvents: 'none',
+            }}
+          >
+            Align
+          </div>
         </Align>
       </div>
     );
   }
 }
 
-ReactDOM.render(<Demo />, document.getElementById('__react-content'));
-
+export default Demo;

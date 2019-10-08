@@ -1,6 +1,5 @@
-import Align from 'rc-align';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import Align from '../src';
 
 class Test extends Component {
   state = {
@@ -16,11 +15,14 @@ class Test extends Component {
     this.id = setInterval(() => {
       const { random } = this.state;
       if (random) {
-        this.setState({
-          randomWidth: 60 + 40 * Math.random(),
-        }, () => {
-          this.forceAlign();
-        });
+        this.setState(
+          {
+            randomWidth: 60 + 40 * Math.random(),
+          },
+          () => {
+            this.forceAlign();
+          },
+        );
       }
     }, 1000);
   }
@@ -35,31 +37,31 @@ class Test extends Component {
       this.$container = document.getElementById('container');
     }
     return this.$container;
-  }
+  };
 
-  containerRef = (ele) => {
+  containerRef = ele => {
     this.$container = ele;
-  }
+  };
 
-  alignRef = (node) => {
+  alignRef = node => {
     this.$align = node;
-  }
+  };
 
   toggleMonitor = () => {
     this.setState({
       monitor: !this.state.monitor,
     });
-  }
+  };
 
   toggleRandom = () => {
     this.setState({
       random: !this.state.random,
     });
-  }
+  };
 
   forceAlign = () => {
     this.$align.forceAlign();
-  }
+  };
 
   render() {
     const { random, randomWidth } = this.state;
@@ -75,13 +77,11 @@ class Test extends Component {
           &nbsp;&nbsp;&nbsp;
           <label>
             <input type="checkbox" checked={this.state.monitor} onChange={this.toggleMonitor} />
-            &nbsp;
-            Monitor window resize
+            &nbsp; Monitor window resize
           </label>
           <label>
             <input type="checkbox" checked={this.state.random} onChange={this.toggleRandom} />
-            &nbsp;
-            Random Size
+            &nbsp; Random Size
           </label>
         </p>
         <div
@@ -91,9 +91,11 @@ class Test extends Component {
             width: '80%',
             height: 500,
             border: '1px solid red',
-            ...(random ? {
-              width: `${randomWidth}%`
-            } : null),
+            ...(random
+              ? {
+                  width: `${randomWidth}%`,
+                }
+              : null),
           }}
         >
           <Align
@@ -110,10 +112,7 @@ class Test extends Component {
                 background: 'yellow',
               }}
             >
-              <input
-                defaultValue="source"
-                style={{ width: '100%' }}
-              />
+              <input defaultValue="source" style={{ width: '100%' }} />
             </div>
           </Align>
         </div>
@@ -122,4 +121,4 @@ class Test extends Component {
   }
 }
 
-ReactDOM.render(<Test />, document.getElementById('__react-content'));
+export default Test;
