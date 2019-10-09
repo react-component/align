@@ -4,46 +4,52 @@ import { mount } from 'enzyme';
 import Align from '../src';
 
 describe('element align', () => {
-  it('resize', () => {
+  beforeEach(() => {
     jest.useFakeTimers();
+  });
 
-    const align = {
-      points: ['bc', 'tc'],
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  const align = {
+    points: ['bc', 'tc'],
+  };
+
+  class Test extends React.Component {
+    getTarget = () => this.$target;
+
+    targetRef = ele => {
+      this.$target = ele;
     };
 
+    render() {
+      return (
+        <div style={{ paddingTop: 100 }}>
+          <div ref={this.targetRef} style={{ display: 'inline-block', width: 50, height: 50 }}>
+            target
+          </div>
+          <Align target={this.getTarget} align={align} {...this.props}>
+            <div
+              id="ele_src"
+              style={{
+                position: 'absolute',
+                width: 50,
+                height: 80,
+              }}
+            >
+              source
+            </div>
+          </Align>
+        </div>
+      );
+    }
+  }
+
+  it('resize', () => {
     const onAlign = jest.fn();
 
-    class Test extends React.Component {
-      getTarget = () => this.$target;
-
-      targetRef = ele => {
-        this.$target = ele;
-      };
-
-      render() {
-        return (
-          <div style={{ paddingTop: 100 }}>
-            <div ref={this.targetRef} style={{ display: 'inline-block', width: 50, height: 50 }}>
-              target
-            </div>
-            <Align target={this.getTarget} align={align} onAlign={onAlign} {...this.props}>
-              <div
-                id="ele_src"
-                style={{
-                  position: 'absolute',
-                  width: 50,
-                  height: 80,
-                }}
-              >
-                source
-              </div>
-            </Align>
-          </div>
-        );
-      }
-    }
-
-    const wrapper = mount(<Test monitorWindowResize />);
+    const wrapper = mount(<Test monitorWindowResize onAlign={onAlign} />);
     expect(onAlign).toHaveBeenCalled();
 
     // Window resize
@@ -62,8 +68,17 @@ describe('element align', () => {
     // Remove should not crash
     wrapper.setProps({ monitorWindowResize: true });
     wrapper.unmount();
+  });
 
-    jest.useRealTimers();
+  it('disabled should trigger align', () => {
+    const onAlign = jest.fn();
+
+    const wrapper = mount(<Test monitorWindowResize onAlign={onAlign} disabled />);
+    expect(onAlign).not.toHaveBeenCalled();
+
+    wrapper.setProps({ disabled: false });
+    jest.runAllTimers();
+    expect(onAlign).toHaveBeenCalled();
   });
 });
 /* eslint-enable */

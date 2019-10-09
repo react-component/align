@@ -107,6 +107,13 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
     }
   });
 
+  // Listen for disabled change
+  React.useEffect(() => {
+    if (!disabled) {
+      forceAlign();
+    }
+  }, [disabled]);
+
   // Listen for window resize
   const winResizeRef = React.useRef<{ remove: Function }>(null);
   React.useEffect(() => {

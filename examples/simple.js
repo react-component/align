@@ -5,6 +5,7 @@ class Test extends Component {
   state = {
     monitor: true,
     random: false,
+    disabled: false,
     randomWidth: 100,
     align: {
       points: ['cc', 'cc'],
@@ -59,6 +60,12 @@ class Test extends Component {
     }));
   };
 
+  toggleDisabled = () => {
+    this.setState(({ disabled }) => ({
+      disabled: !disabled,
+    }));
+  };
+
   forceAlign = () => {
     this.$align.forceAlign();
   };
@@ -85,6 +92,10 @@ class Test extends Component {
             <input type="checkbox" checked={this.state.random} onChange={this.toggleRandom} />
             &nbsp; Random Size
           </label>
+          <label>
+            <input type="checkbox" checked={this.state.disabled} onChange={this.toggleDisabled} />
+            &nbsp; Disabled
+          </label>
         </p>
         <div
           ref={this.containerRef}
@@ -106,6 +117,7 @@ class Test extends Component {
             target={this.getTarget}
             monitorWindowResize={this.state.monitor}
             align={this.state.align}
+            disabled={this.state.disabled}
           >
             <div
               style={{
