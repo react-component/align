@@ -26,5 +26,11 @@ export default (callback: Function, buffer: number) => {
     }
   }
 
-  return [trigger, cancelTrigger];
+  return [
+    trigger,
+    () => {
+      calledRef.current = false;
+      cancelTrigger();
+    },
+  ];
 };

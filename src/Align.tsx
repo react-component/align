@@ -111,6 +111,8 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   React.useEffect(() => {
     if (!disabled) {
       forceAlign();
+    } else {
+      cancelForceAlign();
     }
   }, [disabled]);
 
