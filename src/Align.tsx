@@ -16,10 +16,10 @@ import useBuffer from './hooks/useBuffer';
 export interface AlignProps {
   align: AlignType;
   target: TargetType;
-  onAlign: (source: HTMLElement, result: AlignResult) => void;
-  monitorBufferTime: number;
-  monitorWindowResize: boolean;
-  disabled: boolean;
+  onAlign?: (source: HTMLElement, result: AlignResult) => void;
+  monitorBufferTime?: number;
+  monitorWindowResize?: boolean;
+  disabled?: boolean;
   children: React.ReactElement;
 }
 
