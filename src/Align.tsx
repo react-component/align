@@ -53,6 +53,10 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   // ===================== Align ======================
   const forceAlignRef = React.useRef<Function>();
 
+  const [forceAlign, cancelForceAlign] = useBuffer(() => {
+    forceAlignRef.current();
+  }, monitorBufferTime);
+
   forceAlignRef.current = () => {
     if (!disabled && target) {
       const source = findDOMNode<HTMLElement>(nodeRef.current);
@@ -79,12 +83,10 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       if (onAlign) {
         onAlign(source, result);
       }
+    } else {
+      cancelForceAlign();
     }
   };
-
-  const [forceAlign, cancelForceAlign] = useBuffer(() => {
-    forceAlignRef.current();
-  }, monitorBufferTime);
 
   // ===================== Effect =====================
   // Listen for target updated
