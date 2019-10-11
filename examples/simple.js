@@ -16,14 +16,9 @@ class Test extends Component {
     this.id = setInterval(() => {
       const { random } = this.state;
       if (random) {
-        this.setState(
-          {
-            randomWidth: 60 + 40 * Math.random(),
-          },
-          () => {
-            this.forceAlign();
-          },
-        );
+        this.setState({
+          randomWidth: 60 + 40 * Math.random(),
+        });
       }
     }, 1000);
   }
@@ -101,8 +96,8 @@ class Test extends Component {
           ref={this.containerRef}
           id="container"
           style={{
-            // width: '80%',
-            maxWidth: 1000,
+            width: '80%',
+            // maxWidth: 1000,
             height: 500,
             border: '1px solid red',
             ...(random

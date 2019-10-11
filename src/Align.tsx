@@ -13,10 +13,12 @@ import { isSamePoint, restoreFocus, monitorResize } from './util';
 import { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
 import useBuffer from './hooks/useBuffer';
 
+type OnAlign = (source: HTMLElement, result: AlignResult) => void;
+
 export interface AlignProps {
   align: AlignType;
   target: TargetType;
-  onAlign?: (source: HTMLElement, result: AlignResult) => void;
+  onAlign?: OnAlign;
   monitorBufferTime?: number;
   monitorWindowResize?: boolean;
   disabled?: boolean;
@@ -51,19 +53,24 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   let childNode = React.Children.only(children);
 
   // ===================== Align ======================
-  const forceAlignRef = React.useRef<Function>();
+  // We save the props here to avoid closure makes props ood
+  const forceAlignPropsRef = React.useRef<{
+    disabled?: boolean;
+    target?: TargetType;
+    onAlign?: OnAlign;
+  }>({});
+  forceAlignPropsRef.current.disabled = disabled;
+  forceAlignPropsRef.current.target = target;
+  forceAlignPropsRef.current.onAlign = onAlign;
 
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
-    forceAlignRef.current();
-  }, monitorBufferTime);
-
-  forceAlignRef.current = () => {
-    if (!disabled && target) {
+    const { disabled: latestDisabled, target: latestTarget } = forceAlignPropsRef.current;
+    if (!latestDisabled && latestTarget) {
       const source = findDOMNode<HTMLElement>(nodeRef.current);
 
       let result: AlignResult;
-      const element = getElement(target);
-      const point = getPoint(target);
+      const element = getElement(latestTarget);
+      const point = getPoint(latestTarget);
 
       cacheRef.current.element = element;
       cacheRef.current.point = point;
@@ -83,10 +90,12 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       if (onAlign) {
         onAlign(source, result);
       }
-    } else {
-      cancelForceAlign();
+
+      return true;
     }
-  };
+
+    return false;
+  }, monitorBufferTime);
 
   // ===================== Effect =====================
   // Listen for target updated
