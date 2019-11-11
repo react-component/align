@@ -10,6 +10,7 @@ class Test extends Component {
     align: {
       points: ['cc', 'cc'],
     },
+    sourceWidth: 50,
   };
 
   componentDidMount() {
@@ -65,6 +66,13 @@ class Test extends Component {
     this.$align.forceAlign();
   };
 
+  toggleSourceSize = () => {
+    this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
+      sourceWidth: this.state.sourceWidth + 10,
+    });
+  };
+
   render() {
     const { random, randomWidth } = this.state;
 
@@ -77,6 +85,10 @@ class Test extends Component {
         <p>
           <button type="button" onClick={this.forceAlign}>
             Force align
+          </button>
+          &nbsp;&nbsp;&nbsp;
+          <button type="button" onClick={this.toggleSourceSize}>
+            Resize Source
           </button>
           &nbsp;&nbsp;&nbsp;
           <label>
@@ -117,7 +129,7 @@ class Test extends Component {
             <div
               style={{
                 position: 'absolute',
-                width: 50,
+                width: this.state.sourceWidth,
                 height: 50,
                 background: 'yellow',
               }}
