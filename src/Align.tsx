@@ -5,7 +5,6 @@
 
 import React from 'react';
 import { composeRef } from 'rc-util/lib/ref';
-import findDOMNode from 'rc-util/lib/Dom/findDOMNode';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
@@ -66,7 +65,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
     const { disabled: latestDisabled, target: latestTarget } = forceAlignPropsRef.current;
     if (!latestDisabled && latestTarget) {
-      const source = findDOMNode<HTMLElement>(nodeRef.current);
+      const source = nodeRef.current;
 
       let result: AlignResult;
       const element = getElement(latestTarget);
@@ -102,9 +101,19 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   const resizeMonitor = React.useRef<MonitorRef>({
     cancel: () => {},
   });
+  // Listen for source updated
+  const sourceResizeMonitor = React.useRef<MonitorRef>({
+    cancel: () => {},
+  });
   React.useEffect(() => {
     const element = getElement(target);
     const point = getPoint(target);
+
+    if (nodeRef.current !== sourceResizeMonitor.current.element) {
+      sourceResizeMonitor.current.cancel();
+      sourceResizeMonitor.current.element = nodeRef.current;
+      sourceResizeMonitor.current.cancel = monitorResize(nodeRef.current, forceAlign);
+    }
 
     if (cacheRef.current.element !== element || !isSamePoint(cacheRef.current.point, point)) {
       forceAlign();
@@ -144,6 +153,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   React.useEffect(
     () => () => {
       resizeMonitor.current.cancel();
+      sourceResizeMonitor.current.cancel();
       if (winResizeRef.current) winResizeRef.current.remove();
       cancelForceAlign();
     },
