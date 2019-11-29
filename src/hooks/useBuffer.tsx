@@ -8,8 +8,8 @@ export default (callback: () => boolean, buffer: number) => {
     window.clearTimeout(timeoutRef.current);
   }
 
-  function trigger() {
-    if (!calledRef.current) {
+  function trigger(force?: boolean) {
+    if (!calledRef.current || force === true) {
       if (callback() === false) {
         // Not delay since callback cancelled self
         return;

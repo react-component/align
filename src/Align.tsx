@@ -162,7 +162,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
 
   // ====================== Ref =======================
   React.useImperativeHandle(ref, () => ({
-    forceAlign,
+    forceAlign: () => forceAlign(true),
   }));
 
   // ===================== Render =====================
