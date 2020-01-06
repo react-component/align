@@ -45,6 +45,10 @@ function getPoint(point: TargetType) {
   return point;
 }
 
+interface InternalTestProps {
+  INTERNAL_TRIGGER_ALIGN?: Function;
+}
+
 const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   {
     children,
@@ -55,6 +59,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
     monitorWindowResize,
     monitorBufferTime = 0,
     keepAlign,
+    ...restProps
   },
   ref,
 ) => {
@@ -76,6 +81,13 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   forceAlignPropsRef.current.onAlign = onAlign;
 
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      (restProps as InternalTestProps).INTERNAL_TRIGGER_ALIGN
+    ) {
+      (restProps as InternalTestProps).INTERNAL_TRIGGER_ALIGN();
+    }
+
     const {
       disabled: latestDisabled,
       target: latestTarget,
