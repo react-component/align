@@ -26,7 +26,10 @@ describe('element align', () => {
     render() {
       return (
         <div style={{ paddingTop: 100 }}>
-          <div ref={this.targetRef} style={{ display: 'inline-block', width: 50, height: 50 }}>
+          <div
+            ref={this.targetRef}
+            style={{ display: 'inline-block', width: 50, height: 50 }}
+          >
             target
           </div>
           <Align target={this.getTarget} align={align} {...this.props}>
@@ -73,12 +76,33 @@ describe('element align', () => {
   it('disabled should trigger align', () => {
     const onAlign = jest.fn();
 
-    const wrapper = mount(<Test monitorWindowResize onAlign={onAlign} disabled />);
+    const wrapper = mount(
+      <Test monitorWindowResize onAlign={onAlign} disabled />,
+    );
     expect(onAlign).not.toHaveBeenCalled();
 
     wrapper.setProps({ disabled: false });
     jest.runAllTimers();
     expect(onAlign).toHaveBeenCalled();
+  });
+
+  it('keepAlign', () => {
+    const triggerAlign = jest.fn();
+
+    class TestAlign extends React.Component {
+      state = {};
+
+      render = () => <Test INTERNAL_TRIGGER_ALIGN={triggerAlign} keepAlign />;
+    }
+
+    const wrapper = mount(<TestAlign />);
+    const times = triggerAlign.mock.calls.length;
+
+    for (let i = 0; i < 10; i += 1) {
+      wrapper.instance().forceUpdate();
+    }
+
+    expect(triggerAlign.mock.calls.length > times).toBeTruthy();
   });
 });
 /* eslint-enable */
