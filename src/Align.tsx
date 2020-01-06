@@ -22,8 +22,6 @@ export interface AlignProps {
   monitorWindowResize?: boolean;
   disabled?: boolean;
   children: React.ReactElement;
-  /** Always trigger align with each render */
-  keepAlign?: boolean;
 }
 
 interface MonitorRef {
@@ -45,27 +43,11 @@ function getPoint(point: TargetType) {
   return point;
 }
 
-interface InternalTestProps {
-  INTERNAL_TRIGGER_ALIGN?: Function;
-}
-
 const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
-  {
-    children,
-    disabled,
-    target,
-    align,
-    onAlign,
-    monitorWindowResize,
-    monitorBufferTime = 0,
-    keepAlign,
-    ...restProps
-  },
+  { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime = 0 },
   ref,
 ) => {
-  const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint }>(
-    {},
-  );
+  const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint }>({});
   const nodeRef = React.useRef();
   let childNode = React.Children.only(children);
 
@@ -81,17 +63,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   forceAlignPropsRef.current.onAlign = onAlign;
 
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      (restProps as InternalTestProps).INTERNAL_TRIGGER_ALIGN
-    ) {
-      (restProps as InternalTestProps).INTERNAL_TRIGGER_ALIGN();
-    }
-
-    const {
-      disabled: latestDisabled,
-      target: latestTarget,
-    } = forceAlignPropsRef.current;
+    const { disabled: latestDisabled, target: latestTarget } = forceAlignPropsRef.current;
     if (!latestDisabled && latestTarget) {
       const source = nodeRef.current;
 
@@ -140,16 +112,10 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
     if (nodeRef.current !== sourceResizeMonitor.current.element) {
       sourceResizeMonitor.current.cancel();
       sourceResizeMonitor.current.element = nodeRef.current;
-      sourceResizeMonitor.current.cancel = monitorResize(
-        nodeRef.current,
-        forceAlign,
-      );
+      sourceResizeMonitor.current.cancel = monitorResize(nodeRef.current, forceAlign);
     }
 
-    if (
-      cacheRef.current.element !== element ||
-      !isSamePoint(cacheRef.current.point, point)
-    ) {
+    if (cacheRef.current.element !== element || !isSamePoint(cacheRef.current.point, point)) {
       forceAlign();
 
       // Add resize observer
@@ -169,15 +135,6 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       cancelForceAlign();
     }
   }, [disabled]);
-
-  /**
-   * [Legacy] Should keep re-algin since we don't know if target position changed.
-   */
-  React.useEffect(() => {
-    if (keepAlign && !disabled) {
-      forceAlign(true);
-    }
-  });
 
   // Listen for window resize
   const winResizeRef = React.useRef<{ remove: Function }>(null);
