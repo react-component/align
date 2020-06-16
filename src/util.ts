@@ -19,7 +19,7 @@ export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
 
 export function restoreFocus(activeElement, container) {
   // Focus back if is in the container
-  if (activeElement !== document.activeElement && contains(container, activeElement)&&typeof activeElement.focus==='function') {
+  if (activeElement !== document.activeElement && contains(container, activeElement) && typeof activeElement.focus === 'function') {
     activeElement.focus();
   }
 }
