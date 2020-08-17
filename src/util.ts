@@ -29,12 +29,16 @@ export function monitorResize(element: HTMLElement, callback: Function) {
   let prevHeight: number = null;
 
   function onResize([{ target }]: ResizeObserverEntry[]) {
+    if (!document.contains(target)) return;
     const { width, height } = target.getBoundingClientRect();
     const fixedWidth = Math.floor(width);
     const fixedHeight = Math.floor(height);
 
     if (prevWidth !== fixedWidth || prevHeight !== fixedHeight) {
-      callback({ width: fixedWidth, height: fixedHeight });
+      // https://webkit.org/blog/9997/resizeobserver-in-webkit/
+      requestAnimationFrame(() => {
+        callback({ width: fixedWidth, height: fixedHeight });
+      });
     }
 
     prevWidth = fixedWidth;

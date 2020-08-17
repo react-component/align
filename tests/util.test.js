@@ -1,4 +1,30 @@
-import { isSamePoint } from '../src/util';
+import { isSamePoint, monitorResize } from '../src/util';
+import 'resize-observer-polyfill';
+
+let observer;
+
+// eslint-disable-next-line arrow-body-style
+jest.mock('resize-observer-polyfill', () => {
+  return class ResizeObserverMock {
+    constructor(onResize) {
+      this.onResize = onResize;
+      observer = this;
+    }
+
+    observe(element) {
+      this.element = element;
+    }
+
+    disconnect() {
+      this.element = null;
+      this.onResize = null;
+    }
+
+    triggerResize() {
+      this.onResize([{ target: this.element }]);
+    }
+  };
+});
 
 describe('util', () => {
   describe('isSamePoint', () => {
@@ -25,16 +51,62 @@ describe('util', () => {
         ),
       ).toBeTruthy();
       expect(
-        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, { clientX: 5, clientY: 4 }),
+        isSamePoint(
+          { pageX: 0, pageY: 2, clientX: 3, clientY: 4 },
+          { clientX: 5, clientY: 4 },
+        ),
       ).toBeFalsy();
     });
 
     it('null should be false', () => {
-      expect(isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null)).toBeFalsy();
-      expect(isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 })).toBeFalsy();
+      expect(
+        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null),
+      ).toBeFalsy();
+      expect(
+        isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 }),
+      ).toBeFalsy();
     });
     it('2 empty should be false', () => {
       expect(isSamePoint({}, {})).toBeFalsy();
+    });
+  });
+
+  describe('monitorResize', () => {
+    let element;
+
+    beforeEach(() => {
+      element = document.createElement('div');
+      element.getBoundingClientRect = jest.fn().mockReturnValueOnce({
+        width: 100,
+        height: 100,
+      });
+      document.body.appendChild(element);
+      jest.useFakeTimers();
+      global.requestAnimationFrame = fn => {
+        setTimeout(fn, 16);
+      };
+    });
+
+    afterEach(() => {
+      if (element) element.remove();
+      jest.useRealTimers();
+    });
+
+    it('should defer callback to next frame', () => {
+      const callback = jest.fn();
+      monitorResize(element, callback);
+      observer.triggerResize();
+      jest.runAllTimers();
+      expect(callback).toHaveBeenCalled();
+    });
+
+    it('should skip calling if target is removed already', () => {
+      const callback = jest.fn();
+      monitorResize(element, callback);
+      element.remove();
+      observer.triggerResize();
+      jest.runAllTimers();
+      expect(callback).not.toHaveBeenCalled();
     });
   });
 });
