@@ -19,7 +19,11 @@ export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
 
 export function restoreFocus(activeElement, container) {
   // Focus back if is in the container
-  if (activeElement !== document.activeElement && contains(container, activeElement) && typeof activeElement.focus === 'function') {
+  if (
+    activeElement !== document.activeElement &&
+    contains(container, activeElement) &&
+    typeof activeElement.focus === 'function'
+  ) {
     activeElement.focus();
   }
 }
@@ -36,7 +40,7 @@ export function monitorResize(element: HTMLElement, callback: Function) {
 
     if (prevWidth !== fixedWidth || prevHeight !== fixedHeight) {
       // https://webkit.org/blog/9997/resizeobserver-in-webkit/
-      requestAnimationFrame(() => {
+      Promise.resolve().then(() => {
         callback({ width: fixedWidth, height: fixedHeight });
       });
     }

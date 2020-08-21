@@ -92,11 +92,12 @@ describe('util', () => {
       jest.useRealTimers();
     });
 
-    it('should defer callback to next frame', () => {
+    it('should defer callback to next frame', async () => {
       const callback = jest.fn();
       monitorResize(element, callback);
       observer.triggerResize();
       jest.runAllTimers();
+      await Promise.resolve();
       expect(callback).toHaveBeenCalled();
     });
 
