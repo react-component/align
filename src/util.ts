@@ -33,7 +33,7 @@ export function monitorResize(element: HTMLElement, callback: Function) {
   let prevHeight: number = null;
 
   function onResize([{ target }]: ResizeObserverEntry[]) {
-    if (!document.contains(target)) return;
+    if (!document.documentElement.contains(target)) return;
     const { width, height } = target.getBoundingClientRect();
     const fixedWidth = Math.floor(width);
     const fixedHeight = Math.floor(height);
