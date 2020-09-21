@@ -78,7 +78,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       // We should record activeElement and restore later
       const { activeElement } = document;
 
-      if (element) {
+      if (element && element.offsetParent) {
         result = alignElement(source, element, align);
       } else if (point) {
         result = alignPoint(source, point, align);
