@@ -79,17 +79,15 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       const { activeElement } = document;
 
       // We only align when element is visible
-      if (element) {
-        if (element.offsetParent) {
-          result = alignElement(source, element, align);
-        }
+      if (element && element.offsetParent) {
+        result = alignElement(source, element, align);
       } else if (point) {
         result = alignPoint(source, point, align);
       }
 
       restoreFocus(activeElement, source);
 
-      if (onAlign) {
+      if (onAlign && result) {
         onAlign(source, result);
       }
 
