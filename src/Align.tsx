@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { composeRef } from 'rc-util/lib/ref';
+import isVisible from 'rc-util/lib/Dom/isVisible';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
@@ -79,7 +80,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
       const { activeElement } = document;
 
       // We only align when element is visible
-      if (element && element.offsetParent) {
+      if (element && isVisible(element)) {
         result = alignElement(source, element, align);
       } else if (point) {
         result = alignPoint(source, point, align);

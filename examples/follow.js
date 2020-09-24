@@ -7,6 +7,16 @@ const Demo = () => {
   const [left, setLeft] = React.useState(100);
   const [top, setTop] = React.useState(100);
   const [visible, setVisible] = React.useState(true);
+  const [svg, setSvg] = React.useState(false);
+
+  const sharedStyle: React.CSSProperties = {
+    width,
+    height,
+    position: 'absolute',
+    left,
+    top,
+    display: visible ? 'flex' : 'none',
+  };
 
   return (
     <div>
@@ -29,6 +39,14 @@ const Demo = () => {
       >
         Trigger Visible
       </button>
+      <button
+        type="button"
+        onClick={() => {
+          setSvg(!svg);
+        }}
+      >
+        Follow SVG ({String(svg)})
+      </button>
 
       <div
         style={{
@@ -38,27 +56,26 @@ const Demo = () => {
           position: 'relative',
         }}
       >
-        <div
-          style={{
-            width,
-            height,
-            border: '1px solid green',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'absolute',
-            left,
-            top,
-            display: visible ? 'flex' : 'none',
-          }}
-          id="content"
-        >
-          Content
-        </div>
+        {svg ? (
+          <svg id="content" width={width} height={height} style={sharedStyle}>
+            <rect x="0" y="0" width={width} height={height} />
+          </svg>
+        ) : (
+          <div
+            style={{
+              border: '1px solid green',
+              boxSizing: 'border-box',
+              alignItems: 'center',
+              justifyContent: 'center',
+              ...sharedStyle,
+            }}
+            id="content"
+          >
+            Content
+          </div>
+        )}
 
-        <Align
-          target={() => document.getElementById('content')}
-          align={{ points: ['tc', 'bc'] }}
-        >
+        <Align target={() => document.getElementById('content')} align={{ points: ['tc', 'bc'] }}>
           <div
             style={{
               border: '1px solid blue',
