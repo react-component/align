@@ -1,9 +1,16 @@
 /* eslint-disable class-methods-use-this */
 import React from 'react';
 import { mount } from 'enzyme';
+import { spyElementPrototype } from 'rc-util/lib/test/domHook';
 import Align from '../src';
 
 describe('element align', () => {
+  beforeAll(() => {
+    spyElementPrototype(HTMLElement, 'offsetParent', {
+      get: () => ({}),
+    });
+  });
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
