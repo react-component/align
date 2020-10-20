@@ -64,7 +64,11 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   forceAlignPropsRef.current.onAlign = onAlign;
 
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
-    const { disabled: latestDisabled, target: latestTarget } = forceAlignPropsRef.current;
+    const {
+      disabled: latestDisabled,
+      target: latestTarget,
+      onAlign: latestOnAlign,
+    } = forceAlignPropsRef.current;
     if (!latestDisabled && latestTarget) {
       const source = nodeRef.current;
 
@@ -88,8 +92,8 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
 
       restoreFocus(activeElement, source);
 
-      if (onAlign && result) {
-        onAlign(source, result);
+      if (latestOnAlign && result) {
+        latestOnAlign(source, result);
       }
 
       return true;
