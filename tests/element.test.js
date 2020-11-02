@@ -87,5 +87,41 @@ describe('element align', () => {
     jest.runAllTimers();
     expect(onAlign).toHaveBeenCalled();
   });
+
+  it('should switch to the correct align callback after starting the timers', () => {
+    // This test case is tricky. An error occurs if the following things happen
+    // exactly in this order:
+    // * Render <Align> with `onAlign1`.
+    // * The callback in useBuffer is queued using setTimeout, to trigger after
+    //   `monitorBufferTime` ms (which even when it's set to 0 is queued and
+    //   not synchronously executed).
+    // * The onAlign prop is changed to `onAlign2`.
+    // * The callback from useBuffer is called. The now correct onAlign
+    //   callback would be `onAlign2`, and `onAlign1` should not be called.
+    // This changing of the prop in between a 0 ms timeout is extremely rare.
+    // It does however occur more often in real-world applications with
+    // react-component/trigger, when its requestAnimationFrame and this timeout
+    // race against each other.
+
+    const onAlign1 = jest.fn();
+    const onAlign2 = jest.fn();
+
+    const wrapper = mount(<Test onAlign={onAlign1} />);
+
+    // Make sure the initial render's call to onAlign does not matter.
+    onAlign1.mockReset();
+    onAlign2.mockReset();
+
+    // Re-render the component with the new callback. Expect from here on all
+    // callbacks to call the new onAlign2.
+    wrapper.setProps({ onAlign: onAlign2 });
+
+    // Now the timeout is executed, and we expect the onAlign2 callback to
+    // receive the call, not onAlign1.
+    jest.runAllTimers();
+
+    expect(onAlign1).not.toHaveBeenCalled();
+    expect(onAlign2).toHaveBeenCalled();
+  });
 });
 /* eslint-enable */
