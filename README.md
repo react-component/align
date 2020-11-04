@@ -4,7 +4,7 @@
 React Align Component. Wrapper around https://github.com/yiminghe/dom-align.
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][github-actions-image]][github-actions-url]
 [![Codecov][codecov-image]][codecov-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
@@ -12,8 +12,8 @@ React Align Component. Wrapper around https://github.com/yiminghe/dom-align.
 
 [npm-image]: http://img.shields.io/npm/v/rc-align.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-align
-[travis-image]: https://img.shields.io/travis/react-component/align.svg?style=flat-square
-[travis-url]: https://travis-ci.org/react-component/align
+[github-actions-image]: https://github.com/react-component/align/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/react-component/align/actions
 [codecov-image]: https://img.shields.io/codecov/c/github/react-component/align/master.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/react-component/align/branch/master
 [gemnasium-image]: http://img.shields.io/gemnasium/react-component/align.svg?style=flat-square
