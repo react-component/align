@@ -44,7 +44,7 @@ function getPoint(point: TargetType) {
   return point;
 }
 
-const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
+const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime = 0 },
   ref,
 ) => {
