@@ -3,6 +3,30 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Align from '../src';
 
+// eslint-disable-next-line arrow-body-style
+jest.mock('@juggle/resize-observer', () => {
+  return {
+    ResizeObserver: class ResizeObserverMock {
+      constructor(onResize) {
+        this.onResize = onResize;
+      }
+
+      observe(element) {
+        this.element = element;
+      }
+
+      disconnect() {
+        this.element = null;
+        this.onResize = null;
+      }
+
+      triggerResize() {
+        this.onResize([{ target: this.element }]);
+      }
+    },
+  };
+});
+
 describe('point align', () => {
   function createAlign(props) {
     return mount(

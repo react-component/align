@@ -1,6 +1,6 @@
-import ResizeObserver from 'resize-observer-polyfill';
+import { ResizeObserver } from '@juggle/resize-observer';
 import contains from 'rc-util/lib/Dom/contains';
-import { TargetPoint } from './interface';
+import type { TargetPoint } from './interface';
 
 export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
   if (prev === next) return true;

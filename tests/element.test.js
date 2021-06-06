@@ -1,8 +1,33 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable class-methods-use-this */
 import React from 'react';
 import { mount } from 'enzyme';
 import { spyElementPrototype } from 'rc-util/lib/test/domHook';
 import Align from '../src';
+
+// eslint-disable-next-line arrow-body-style
+jest.mock('@juggle/resize-observer', () => {
+  return {
+    ResizeObserver: class ResizeObserverMock {
+      constructor(onResize) {
+        this.onResize = onResize;
+      }
+
+      observe(element) {
+        this.element = element;
+      }
+
+      disconnect() {
+        this.element = null;
+        this.onResize = null;
+      }
+
+      triggerResize() {
+        this.onResize([{ target: this.element }]);
+      }
+    },
+  };
+});
 
 describe('element align', () => {
   beforeAll(() => {
