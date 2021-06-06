@@ -1,28 +1,29 @@
 import { isSamePoint, monitorResize } from '../src/util';
-import 'resize-observer-polyfill';
 
 let observer;
 
 // eslint-disable-next-line arrow-body-style
-jest.mock('resize-observer-polyfill', () => {
-  return class ResizeObserverMock {
-    constructor(onResize) {
-      this.onResize = onResize;
-      observer = this;
-    }
+jest.mock('@juggle/resize-observer', () => {
+  return {
+    ResizeObserver: class ResizeObserverMock {
+      constructor(onResize) {
+        this.onResize = onResize;
+        observer = this;
+      }
 
-    observe(element) {
-      this.element = element;
-    }
+      observe(element) {
+        this.element = element;
+      }
 
-    disconnect() {
-      this.element = null;
-      this.onResize = null;
-    }
+      disconnect() {
+        this.element = null;
+        this.onResize = null;
+      }
 
-    triggerResize() {
-      this.onResize([{ target: this.element }]);
-    }
+      triggerResize() {
+        this.onResize([{ target: this.element }]);
+      }
+    },
   };
 });
 
@@ -51,20 +52,13 @@ describe('util', () => {
         ),
       ).toBeTruthy();
       expect(
-        isSamePoint(
-          { pageX: 0, pageY: 2, clientX: 3, clientY: 4 },
-          { clientX: 5, clientY: 4 },
-        ),
+        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, { clientX: 5, clientY: 4 }),
       ).toBeFalsy();
     });
 
     it('null should be false', () => {
-      expect(
-        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null),
-      ).toBeFalsy();
-      expect(
-        isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 }),
-      ).toBeFalsy();
+      expect(isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null)).toBeFalsy();
+      expect(isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 })).toBeFalsy();
     });
     it('2 empty should be false', () => {
       expect(isSamePoint({}, {})).toBeFalsy();
