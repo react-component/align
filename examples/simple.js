@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Align from '../src';
 
+const allPoints = ['tl', 'tc', 'tr', 'cl', 'cc', 'cr', 'bl', 'bc', 'br'];
+
 class Test extends Component {
   state = {
     monitor: true,
@@ -62,6 +64,18 @@ class Test extends Component {
     }));
   };
 
+  randomAlign = () => {
+    const randomPoints = [];
+    randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
+    randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
+    console.log(randomPoints);
+    this.setState({
+      align: {
+        points: randomPoints,
+      },
+    });
+  };
+
   forceAlign = () => {
     this.$align.forceAlign();
   };
@@ -89,6 +103,10 @@ class Test extends Component {
           &nbsp;&nbsp;&nbsp;
           <button type="button" onClick={this.toggleSourceSize}>
             Resize Source
+          </button>
+          &nbsp;&nbsp;&nbsp;
+          <button type="button" onClick={this.randomAlign}>
+            Random Align
           </button>
           &nbsp;&nbsp;&nbsp;
           <label>
