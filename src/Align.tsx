@@ -11,7 +11,7 @@ import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isEqual from 'lodash/isEqual';
 
 import { isSamePoint, restoreFocus, monitorResize } from './util';
-import { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
+import type { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
 import useBuffer from './hooks/useBuffer';
 
 type OnAlign = (source: HTMLElement, result: AlignResult) => void;
@@ -192,7 +192,7 @@ const Align: React.RefForwardingComponent<RefAlign, AlignProps> = (
   return childNode;
 };
 
-const RefAlign = React.forwardRef(Align);
-RefAlign.displayName = 'Align';
+const RcAlign = React.forwardRef(Align);
+RcAlign.displayName = 'Align';
 
-export default RefAlign;
+export default RcAlign;

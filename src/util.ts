@@ -1,6 +1,6 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import contains from 'rc-util/lib/Dom/contains';
-import { TargetPoint } from './interface';
+import type { TargetPoint } from './interface';
 
 export function isSamePoint(prev: TargetPoint, next: TargetPoint) {
   if (prev === next) return true;
@@ -28,7 +28,10 @@ export function restoreFocus(activeElement, container) {
   }
 }
 
-export function monitorResize(element: HTMLElement, callback: Function) {
+export function monitorResize(
+  element: HTMLElement,
+  callback: (args: { width?: number; height?: number }) => void,
+) {
   let prevWidth: number = null;
   let prevHeight: number = null;
 
