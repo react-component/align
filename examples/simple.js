@@ -68,7 +68,6 @@ class Test extends Component {
     const randomPoints = [];
     randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
     randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
-    console.log(randomPoints);
     this.setState({
       align: {
         points: randomPoints,
