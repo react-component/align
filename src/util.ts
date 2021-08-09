@@ -28,10 +28,7 @@ export function restoreFocus(activeElement, container) {
   }
 }
 
-export function monitorResize(
-  element: HTMLElement,
-  callback: (args: { width?: number; height?: number }) => void,
-) {
+export function monitorResize(element: HTMLElement, callback: Function) {
   let prevWidth: number = null;
   let prevHeight: number = null;
 
