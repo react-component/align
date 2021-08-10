@@ -28,7 +28,7 @@
     "start": "cross-env NODE_ENV=development father doc dev --storybook",
     "build": "father doc build --storybook",
     "compile": "father build",
-    "tsc": "tsc",
+    "tsc": "tsc --noEmit",
     "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "lint": "eslint src/ examples/ --ext .tsx,.ts,.jsx,.js",
     "test": "father test",

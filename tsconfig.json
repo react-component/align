@@ -7,7 +7,6 @@
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "noEmit": true,
     "paths": {
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"],
