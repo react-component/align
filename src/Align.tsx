@@ -8,9 +8,10 @@ import { composeRef } from 'rc-util/lib/ref';
 import isVisible from 'rc-util/lib/Dom/isVisible';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
+import isEqual from 'lodash/isEqual';
 
 import { isSamePoint, restoreFocus, monitorResize } from './util';
-import { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
+import type { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
 import useBuffer from './hooks/useBuffer';
 
 type OnAlign = (source: HTMLElement, result: AlignResult) => void;
@@ -48,7 +49,9 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   { children, disabled, target, align, onAlign, monitorWindowResize, monitorBufferTime = 0 },
   ref,
 ) => {
-  const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint }>({});
+  const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint; align?: AlignType }>(
+    {},
+  );
   const nodeRef = React.useRef();
   let childNode = React.Children.only(children);
 
@@ -57,16 +60,19 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   const forceAlignPropsRef = React.useRef<{
     disabled?: boolean;
     target?: TargetType;
+    align?: AlignType;
     onAlign?: OnAlign;
   }>({});
   forceAlignPropsRef.current.disabled = disabled;
   forceAlignPropsRef.current.target = target;
+  forceAlignPropsRef.current.align = align;
   forceAlignPropsRef.current.onAlign = onAlign;
 
   const [forceAlign, cancelForceAlign] = useBuffer(() => {
     const {
       disabled: latestDisabled,
       target: latestTarget,
+      align: latestAlign,
       onAlign: latestOnAlign,
     } = forceAlignPropsRef.current;
     if (!latestDisabled && latestTarget) {
@@ -78,6 +84,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
 
       cacheRef.current.element = element;
       cacheRef.current.point = point;
+      cacheRef.current.align = latestAlign;
 
       // IE lose focus after element realign
       // We should record activeElement and restore later
@@ -121,7 +128,11 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
       sourceResizeMonitor.current.cancel = monitorResize(nodeRef.current, forceAlign);
     }
 
-    if (cacheRef.current.element !== element || !isSamePoint(cacheRef.current.point, point)) {
+    if (
+      cacheRef.current.element !== element ||
+      !isSamePoint(cacheRef.current.point, point) ||
+      !isEqual(cacheRef.current.align, align)
+    ) {
       forceAlign();
 
       // Add resize observer
@@ -181,7 +192,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   return childNode;
 };
 
-const RefAlign = React.forwardRef(Align);
-RefAlign.displayName = 'Align';
+const RcAlign = React.forwardRef(Align);
+RcAlign.displayName = 'Align';
 
-export default RefAlign;
+export default RcAlign;

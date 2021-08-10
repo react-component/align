@@ -88,6 +88,24 @@ describe('element align', () => {
     expect(onAlign).toHaveBeenCalled();
   });
 
+  // https://github.com/ant-design/ant-design/issues/31717
+  it('changing align should trigger onAlign', () => {
+    const onAlign = jest.fn();
+    const wrapper = mount(<Test align={{ points: ['cc', 'cc'] }} onAlign={onAlign} />);
+    expect(onAlign).toHaveBeenCalledTimes(1);
+    expect(onAlign).toHaveBeenLastCalledWith(
+      expect.any(HTMLElement),
+      expect.objectContaining({ points: ['cc', 'cc'] }),
+    );
+    wrapper.setProps({ align: { points: ['cc', 'tl'] } });
+    jest.runAllTimers();
+    expect(onAlign).toHaveBeenCalledTimes(2);
+    expect(onAlign).toHaveBeenLastCalledWith(
+      expect.any(HTMLElement),
+      expect.objectContaining({ points: ['cc', 'tl'] }),
+    );
+  });
+
   it('should switch to the correct align callback after starting the timers', () => {
     // This test case is tricky. An error occurs if the following things happen
     // exactly in this order:
