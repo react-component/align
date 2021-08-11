@@ -92,9 +92,9 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
 
       // We only align when element is visible
       if (element && isVisible(element)) {
-        result = alignElement(source, element, align);
+        result = alignElement(source, element, latestAlign);
       } else if (point) {
-        result = alignPoint(source, point, align);
+        result = alignPoint(source, point, latestAlign);
       }
 
       restoreFocus(activeElement, source);
