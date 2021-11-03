@@ -57,4 +57,4 @@ export interface TargetPoint {
   pageY?: number;
 }
 
-export type TargetType = (() => HTMLElement) | TargetPoint;
+export type TargetType = (() => HTMLElement | null) | TargetPoint;
