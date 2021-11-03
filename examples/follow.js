@@ -9,7 +9,7 @@ const Demo = () => {
   const [visible, setVisible] = React.useState(true);
   const [svg, setSvg] = React.useState(false);
 
-  const sharedStyle: React.CSSProperties = {
+  const sharedStyle = {
     width,
     height,
     position: 'absolute',

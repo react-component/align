@@ -24,7 +24,7 @@ class Demo extends Component {
           Click this region please : )
         </div>
 
-        <Align ref={this.alignRef} target={this.state.point} align={align}>
+        <Align target={this.state.point} align={align}>
           <div
             style={{
               position: 'absolute',
