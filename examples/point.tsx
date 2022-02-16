@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Ref } from 'react';
 import Align from '../src';
+import {RefAlign} from '../src/Align';
 
 const align = {
   points: ['cc', 'cc'],
@@ -13,6 +14,7 @@ class Demo extends Component {
   onClick = ({ pageX, pageY }) => {
     this.setState({ point: { pageX, pageY } });
   };
+  alignRef: Ref<RefAlign>;
 
   render() {
     return (

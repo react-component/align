@@ -1,9 +1,18 @@
+import { AlignType } from '../src/interface';
 import React, { Component } from 'react';
 import Align from '../src';
+import {RefAlign} from '../src/Align';
 
 const allPoints = ['tl', 'tc', 'tr', 'cl', 'cc', 'cr', 'bl', 'bc', 'br'];
 
-class Test extends Component {
+class Test extends Component<{}, {
+  monitor: boolean;
+  random: boolean;
+  disabled: boolean;
+  randomWidth: number;
+  align: AlignType;
+  sourceWidth: number;
+}> {
   state = {
     monitor: true,
     random: false,
@@ -14,6 +23,9 @@ class Test extends Component {
     },
     sourceWidth: 50,
   };
+  id: ReturnType<typeof setInterval>;
+  $container: HTMLElement | null = null;
+  $align: RefAlign;
 
   componentDidMount() {
     this.id = setInterval(() => {
