@@ -4,8 +4,8 @@ import Align from '../src';
 const Demo = () => {
   const [width, setWidth] = React.useState(100);
   const [height, setHeight] = React.useState(100);
-  const [left, setLeft] = React.useState(100);
-  const [top, setTop] = React.useState(100);
+  const [left, setLeft] = React.useState<string | number>(100);
+  const [top, setTop] = React.useState<string | number>(100);
   const [visible, setVisible] = React.useState(true);
   const [svg, setSvg] = React.useState(false);
 
