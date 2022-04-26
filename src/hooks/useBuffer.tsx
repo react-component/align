@@ -9,6 +9,8 @@ export default (callback: () => boolean, buffer: number) => {
   }
 
   function trigger(force?: boolean) {
+    cancelTrigger();
+
     if (!calledRef.current || force === true) {
       if (callback() === false) {
         // Not delay since callback cancelled self
@@ -16,12 +18,10 @@ export default (callback: () => boolean, buffer: number) => {
       }
 
       calledRef.current = true;
-      cancelTrigger();
       timeoutRef.current = window.setTimeout(() => {
         calledRef.current = false;
       }, buffer);
     } else {
-      cancelTrigger();
       timeoutRef.current = window.setTimeout(() => {
         calledRef.current = false;
         trigger();
