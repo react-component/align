@@ -8,7 +8,7 @@ import { composeRef } from 'rc-util/lib/ref';
 import isVisible from 'rc-util/lib/Dom/isVisible';
 import { alignElement, alignPoint } from 'dom-align';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash.isequal';
 
 import { isSamePoint, restoreFocus, monitorResize } from './util';
 import type { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
