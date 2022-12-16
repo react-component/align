@@ -3,16 +3,16 @@
  *  - childrenProps
  */
 
-import React from 'react';
-import { composeRef } from 'rc-util/lib/ref';
-import isVisible from 'rc-util/lib/Dom/isVisible';
 import { alignElement, alignPoint } from 'dom-align';
-import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isEqual from 'lodash/isEqual';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
+import isVisible from 'rc-util/lib/Dom/isVisible';
+import { composeRef } from 'rc-util/lib/ref';
+import React from 'react';
 
-import { isSamePoint, restoreFocus, monitorResize } from './util';
-import type { AlignType, AlignResult, TargetType, TargetPoint } from './interface';
 import useBuffer from './hooks/useBuffer';
+import type { AlignResult, AlignType, TargetPoint, TargetType } from './interface';
+import { isSamePoint, monitorResize, restoreFocus } from './util';
 
 type OnAlign = (source: HTMLElement, result: AlignResult) => void;
 
@@ -24,11 +24,6 @@ export interface AlignProps {
   monitorWindowResize?: boolean;
   disabled?: boolean;
   children: React.ReactElement;
-}
-
-interface MonitorRef {
-  element?: HTMLElement;
-  cancel: () => void;
 }
 
 export interface RefAlign {
@@ -52,6 +47,8 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   const cacheRef = React.useRef<{ element?: HTMLElement; point?: TargetPoint; align?: AlignType }>(
     {},
   );
+
+  /** Popup node ref */
   const nodeRef = React.useRef();
   let childNode = React.Children.only(children);
 
@@ -75,9 +72,10 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
       align: latestAlign,
       onAlign: latestOnAlign,
     } = forceAlignPropsRef.current;
-    if (!latestDisabled && latestTarget) {
-      const source = nodeRef.current;
 
+    const source = nodeRef.current;
+
+    if (!latestDisabled && latestTarget && source) {
       let result: AlignResult;
       const element = getElement(latestTarget);
       const point = getPoint(latestTarget);
@@ -110,39 +108,31 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   }, monitorBufferTime);
 
   // ===================== Effect =====================
-  // Listen for target updated
-  const resizeMonitor = React.useRef<MonitorRef>({
-    cancel: () => {},
-  });
-  // Listen for source updated
-  const sourceResizeMonitor = React.useRef<MonitorRef>({
-    cancel: () => {},
-  });
+  // Handle props change
+  const element = getElement(target);
+  const point = getPoint(target);
+
   React.useEffect(() => {
-    const element = getElement(target);
-    const point = getPoint(target);
-
-    if (nodeRef.current !== sourceResizeMonitor.current.element) {
-      sourceResizeMonitor.current.cancel();
-      sourceResizeMonitor.current.element = nodeRef.current;
-      sourceResizeMonitor.current.cancel = monitorResize(nodeRef.current, forceAlign);
-    }
-
     if (
       cacheRef.current.element !== element ||
       !isSamePoint(cacheRef.current.point, point) ||
       !isEqual(cacheRef.current.align, align)
     ) {
       forceAlign();
-
-      // Add resize observer
-      if (resizeMonitor.current.element !== element) {
-        resizeMonitor.current.cancel();
-        resizeMonitor.current.element = element;
-        resizeMonitor.current.cancel = monitorResize(element, forceAlign);
-      }
     }
   });
+
+  // Watch popup element resize
+  React.useEffect(() => {
+    const cancelFn = monitorResize(nodeRef.current, forceAlign);
+    return cancelFn;
+  }, [nodeRef.current]);
+
+  // Watch target element resize
+  React.useEffect(() => {
+    const cancelFn = monitorResize(element, forceAlign);
+    return cancelFn;
+  }, [element]);
 
   // Listen for disabled change
   React.useEffect(() => {
@@ -154,24 +144,17 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   }, [disabled]);
 
   // Listen for window resize
-  const winResizeRef = React.useRef<{ remove: Function }>(null);
   React.useEffect(() => {
     if (monitorWindowResize) {
-      if (!winResizeRef.current) {
-        winResizeRef.current = addEventListener(window, 'resize', forceAlign);
-      }
-    } else if (winResizeRef.current) {
-      winResizeRef.current.remove();
-      winResizeRef.current = null;
+      const cancelFn = addEventListener(window, 'resize', forceAlign);
+
+      return cancelFn.remove;
     }
   }, [monitorWindowResize]);
 
   // Clear all if unmount
   React.useEffect(
     () => () => {
-      resizeMonitor.current.cancel();
-      sourceResizeMonitor.current.cancel();
-      if (winResizeRef.current) winResizeRef.current.remove();
       cancelForceAlign();
     },
     [],

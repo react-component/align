@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import React from 'react';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { spyElementPrototype } from 'rc-util/lib/test/domHook';
+import React from 'react';
 import Align from '../src';
 
 describe('element align', () => {
@@ -16,6 +16,7 @@ describe('element align', () => {
   });
 
   afterEach(() => {
+    jest.clearAllTimers();
     jest.useRealTimers();
   });
 
