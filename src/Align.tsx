@@ -154,15 +154,11 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   }, [disabled]);
 
   // Listen for window resize
-  const winResizeRef = React.useRef<{ remove: Function }>(null);
   React.useEffect(() => {
     if (monitorWindowResize) {
-      if (!winResizeRef.current) {
-        winResizeRef.current = addEventListener(window, 'resize', forceAlign);
-      }
-    } else if (winResizeRef.current) {
-      winResizeRef.current.remove();
-      winResizeRef.current = null;
+       const cancelFn = addEventListener(window, 'resize', forceAlign);
+
+       return cancelFn;
     }
   }, [monitorWindowResize]);
 
@@ -171,7 +167,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
     () => () => {
       resizeMonitor.current.cancel();
       sourceResizeMonitor.current.cancel();
-      if (winResizeRef.current) winResizeRef.current.remove();
+      // if (winResizeRef.current) winResizeRef.current.remove();
       cancelForceAlign();
     },
     [],
