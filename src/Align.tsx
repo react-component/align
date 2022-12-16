@@ -68,7 +68,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   forceAlignPropsRef.current.align = align;
   forceAlignPropsRef.current.onAlign = onAlign;
 
-  const [forceAlign, cancelForceAlign] = useBuffer(() => {
+  const [forceAlign, cancelForceAlign] = useBuffer((force) => {
     const {
       disabled: latestDisabled,
       target: latestTarget,

@@ -25,13 +25,13 @@
   "main": "./lib/index",
   "module": "./es/index",
   "scripts": {
-    "start": "cross-env NODE_ENV=development father doc dev --storybook",
-    "build": "father doc build --storybook",
+    "start": "dumi dev",
+    "build": "dumi build",
     "compile": "father build",
     "tsc": "tsc --noEmit",
     "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "lint": "eslint src/ examples/ --ext .tsx,.ts,.jsx,.js",
-    "test": "father test",
+    "test": "rc-test",
     "coverage": "father test --coverage",
     "now-build": "npm run build"
   },
@@ -48,17 +48,20 @@
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
+    "@rc-component/father-plugin": "^1.0.0",
     "@types/jest": "^24.0.18",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/warning": "^3.0.0",
     "cross-env": "^7.0.3",
+    "dumi": "^2.0.15",
     "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.4.0",
     "eslint": "^7.1.0",
-    "father": "^2.13.2",
+    "father": "^4.0.0",
     "np": "^5.0.3",
+    "rc-test": "^7.0.14",
     "typescript": "^4.0.3"
   }
 }
