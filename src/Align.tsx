@@ -184,7 +184,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
 
   // ===================== Render =====================
   if (React.isValidElement(childNode)) {
-    childNode = React.cloneElement(childNode, {
+    childNode = React.cloneElement<any>(childNode, {
       ref: composeRef((childNode as any).ref, nodeRef),
     });
   }

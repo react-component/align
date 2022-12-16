@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import { spyElementPrototype } from 'rc-util/lib/test/domHook';
 import Align from '../src';
 
@@ -23,7 +23,9 @@ describe('element align', () => {
     points: ['bc', 'tc'],
   };
 
-  class Test extends React.Component {
+  class Test extends React.Component<any> {
+    $target: any;
+
     getTarget = () => this.$target;
 
     targetRef = ele => {
@@ -56,7 +58,7 @@ describe('element align', () => {
   it('resize', () => {
     const onAlign = jest.fn();
 
-    const wrapper = mount(<Test monitorWindowResize onAlign={onAlign} />);
+    const { unmount, rerender } = render(<Test monitorWindowResize onAlign={onAlign} />);
     expect(onAlign).toHaveBeenCalled();
 
     // Window resize
@@ -67,23 +69,23 @@ describe('element align', () => {
 
     // Not listen resize
     onAlign.mockReset();
-    wrapper.setProps({ monitorWindowResize: false });
+    rerender(<Test monitorWindowResize={false} onAlign={onAlign} />);
     window.dispatchEvent(new Event('resize'));
     jest.runAllTimers();
     expect(onAlign).not.toHaveBeenCalled();
 
     // Remove should not crash
-    wrapper.setProps({ monitorWindowResize: true });
-    wrapper.unmount();
+    rerender(<Test monitorWindowResize onAlign={onAlign} />);
+    unmount();
   });
 
   it('disabled should trigger align', () => {
     const onAlign = jest.fn();
 
-    const wrapper = mount(<Test monitorWindowResize onAlign={onAlign} disabled />);
+    const { rerender } = render(<Test monitorWindowResize onAlign={onAlign} disabled />);
     expect(onAlign).not.toHaveBeenCalled();
 
-    wrapper.setProps({ disabled: false });
+    rerender(<Test monitorWindowResize onAlign={onAlign} disabled={false} />);
     jest.runAllTimers();
     expect(onAlign).toHaveBeenCalled();
   });
@@ -91,13 +93,14 @@ describe('element align', () => {
   // https://github.com/ant-design/ant-design/issues/31717
   it('changing align should trigger onAlign', () => {
     const onAlign = jest.fn();
-    const wrapper = mount(<Test align={{ points: ['cc', 'cc'] }} onAlign={onAlign} />);
+    const { rerender } = render(<Test align={{ points: ['cc', 'cc'] }} onAlign={onAlign} />);
     expect(onAlign).toHaveBeenCalledTimes(1);
     expect(onAlign).toHaveBeenLastCalledWith(
       expect.any(HTMLElement),
       expect.objectContaining({ points: ['cc', 'cc'] }),
     );
-    wrapper.setProps({ align: { points: ['cc', 'tl'] } });
+    // wrapper.setProps({ align: { points: ['cc', 'tl'] } });
+    rerender(<Test align={{ points: ['cc', 'tl'] }} onAlign={onAlign} />);
     jest.runAllTimers();
     expect(onAlign).toHaveBeenCalledTimes(2);
     expect(onAlign).toHaveBeenLastCalledWith(
@@ -124,7 +127,7 @@ describe('element align', () => {
     const onAlign1 = jest.fn();
     const onAlign2 = jest.fn();
 
-    const wrapper = mount(<Test onAlign={onAlign1} />);
+    const { rerender } = render(<Test onAlign={onAlign1} />);
 
     // Make sure the initial render's call to onAlign does not matter.
     onAlign1.mockReset();
@@ -132,7 +135,7 @@ describe('element align', () => {
 
     // Re-render the component with the new callback. Expect from here on all
     // callbacks to call the new onAlign2.
-    wrapper.setProps({ onAlign: onAlign2 });
+    rerender(<Test onAlign={onAlign2} />);
 
     // Now the timeout is executed, and we expect the onAlign2 callback to
     // receive the call, not onAlign1.
