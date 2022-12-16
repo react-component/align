@@ -72,9 +72,10 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
       align: latestAlign,
       onAlign: latestOnAlign,
     } = forceAlignPropsRef.current;
-    if (!latestDisabled && latestTarget) {
-      const source = nodeRef.current;
 
+    const source = nodeRef.current;
+
+    if (!latestDisabled && latestTarget && source) {
       let result: AlignResult;
       const element = getElement(latestTarget);
       const point = getPoint(latestTarget);
