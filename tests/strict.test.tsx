@@ -13,12 +13,10 @@ jest.mock('../src/util', () => {
     ...originUtil,
     monitorResize: (...args: any[]) => {
       (global as any).watchCnt += 1;
-      console.log('mount', (global as any).watchCnt);
       const cancelFn = originUtil.monitorResize(...args);
 
       return () => {
         (global as any).watchCnt -= 1;
-        console.log('unmount', (global as any).watchCnt);
         cancelFn();
       };
     },
@@ -61,7 +59,7 @@ describe('element align', () => {
       );
     };
 
-    render(
+    const { unmount } = render(
       <React.StrictMode>
         <Demo />
       </React.StrictMode>,
@@ -71,7 +69,10 @@ describe('element align', () => {
       jest.runAllTimers();
     });
 
-    console.log('====================================');
+    expect((global as any).watchCnt).toBeGreaterThan(0);
+
+    unmount();
+    expect((global as any).watchCnt).toEqual(0);
   });
 });
 /* eslint-enable */

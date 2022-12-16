@@ -26,11 +26,6 @@ export interface AlignProps {
   children: React.ReactElement;
 }
 
-// interface MonitorRef {
-//   element?: HTMLElement;
-//   cancel: () => void;
-// }
-
 export interface RefAlign {
   forceAlign: () => void;
 }
@@ -112,15 +107,6 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   }, monitorBufferTime);
 
   // ===================== Effect =====================
-  // Listen for target updated
-  // const resizeMonitor = React.useRef<MonitorRef>({
-  //   cancel: () => {},
-  // });
-  // Listen for source updated
-  // const sourceResizeMonitor = React.useRef<MonitorRef>({
-  //   cancel: () => {},
-  // });
-
   // Handle props change
   const element = getElement(target);
   const point = getPoint(target);
@@ -147,32 +133,6 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
     return cancelFn;
   }, [element]);
 
-  // React.useEffect(() => {
-  //   // const element = getElement(target);
-  //   // const point = getPoint(target);
-
-  //   // if (nodeRef.current !== sourceResizeMonitor.current.element) {
-  //   //   sourceResizeMonitor.current.cancel();
-  //   //   sourceResizeMonitor.current.element = nodeRef.current;
-  //   //   sourceResizeMonitor.current.cancel = monitorResize(nodeRef.current, forceAlign);
-  //   // }
-
-  //   if (
-  //     cacheRef.current.element !== element ||
-  //     !isSamePoint(cacheRef.current.point, point) ||
-  //     !isEqual(cacheRef.current.align, align)
-  //   ) {
-  //     forceAlign();
-
-  //     // Add resize observer
-  //     if (resizeMonitor.current.element !== element) {
-  //       resizeMonitor.current.cancel();
-  //       resizeMonitor.current.element = element;
-  //       resizeMonitor.current.cancel = monitorResize(element, forceAlign);
-  //     }
-  //   }
-  // });
-
   // Listen for disabled change
   React.useEffect(() => {
     if (!disabled) {
@@ -194,9 +154,6 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   // Clear all if unmount
   React.useEffect(
     () => () => {
-      // resizeMonitor.current.cancel();
-      // sourceResizeMonitor.current.cancel();
-      // if (winResizeRef.current) winResizeRef.current.remove();
       cancelForceAlign();
     },
     [],
