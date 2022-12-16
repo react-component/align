@@ -1,11 +1,15 @@
-import { isSamePoint, monitorResize } from '../src/util';
+/* eslint-disable @typescript-eslint/no-this-alias */
 import 'resize-observer-polyfill';
+import { isSamePoint, monitorResize } from '../src/util';
 
-let observer;
+let observer: any;
 
-// eslint-disable-next-line arrow-body-style
+
 jest.mock('resize-observer-polyfill', () => {
   return class ResizeObserverMock {
+    onResize: any;
+    element: any;
+
     constructor(onResize) {
       this.onResize = onResize;
       observer = this;
@@ -51,20 +55,13 @@ describe('util', () => {
         ),
       ).toBeTruthy();
       expect(
-        isSamePoint(
-          { pageX: 0, pageY: 2, clientX: 3, clientY: 4 },
-          { clientX: 5, clientY: 4 },
-        ),
+        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, { clientX: 5, clientY: 4 }),
       ).toBeFalsy();
     });
 
     it('null should be false', () => {
-      expect(
-        isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null),
-      ).toBeFalsy();
-      expect(
-        isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 }),
-      ).toBeFalsy();
+      expect(isSamePoint({ pageX: 0, pageY: 2, clientX: 3, clientY: 4 }, null)).toBeFalsy();
+      expect(isSamePoint(null, { pageX: 0, pageY: 2, clientX: 3, clientY: 4 })).toBeFalsy();
     });
     it('2 empty should be false', () => {
       expect(isSamePoint({}, {})).toBeFalsy();
@@ -82,7 +79,7 @@ describe('util', () => {
       });
       document.body.appendChild(element);
       jest.useFakeTimers();
-      global.requestAnimationFrame = fn => {
+      (global as any).requestAnimationFrame = fn => {
         setTimeout(fn, 16);
       };
     });
