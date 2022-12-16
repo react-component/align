@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default (callback: () => boolean, buffer: number) => {
+export default (callback: (force?: boolean) => boolean, buffer: number) => {
   const calledRef = React.useRef<boolean>(false);
   const timeoutRef = React.useRef<number>(null);
 
@@ -12,7 +12,7 @@ export default (callback: () => boolean, buffer: number) => {
     cancelTrigger();
 
     if (!calledRef.current || force === true) {
-      if (callback() === false) {
+      if (callback(force) === false) {
         // Not delay since callback cancelled self
         return;
       }

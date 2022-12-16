@@ -1,5 +1,5 @@
 import React from 'react';
-import Align from '../src';
+import Align from '../../src';
 
 const Demo = () => {
   const [width, setWidth] = React.useState(100);
@@ -51,7 +51,6 @@ const Demo = () => {
       <div
         style={{
           border: '1px solid red',
-          width: '90vw',
           height: '50vh',
           position: 'relative',
         }}

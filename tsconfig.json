@@ -3,14 +3,20 @@
     "target": "esnext",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "jsx": "preserve",
+    "jsx": "react",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"],
-      "rc-dialog": ["src/index.ts"]
+      "@/*": [
+        "src/*"
+      ],
+      "@@/*": [
+        "src/.umi/*"
+      ],
+      "rc-align": [
+        "src/index.ts"
+      ]
     }
   }
 }
