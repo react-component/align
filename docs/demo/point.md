@@ -1,3 +1,8 @@
-## Point
+---
+title: Point
+nav:
+  title: Demo
+  path: /demo
+---
 
-<code src="../examples/point.js" />
+<code src="../examples/point.tsx" ></code>

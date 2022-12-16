@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Align from '../src';
+import Align from '../../src';
 
 const align = {
   points: ['cc', 'cc'],

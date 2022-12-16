@@ -14,7 +14,7 @@
       "@@/*": [
         "src/.umi/*"
       ],
-      "rc-dialog": [
+      "rc-align": [
         "src/index.ts"
       ]
     }

@@ -1,9 +1,18 @@
+import Align, { type RefAlign } from 'rc-align';
 import React, { Component } from 'react';
-import Align from '../src';
 
 const allPoints = ['tl', 'tc', 'tr', 'cl', 'cc', 'cr', 'bl', 'bc', 'br'];
 
-class Test extends Component {
+interface TestState {
+  monitor: boolean;
+  random: boolean;
+  disabled: boolean;
+  randomWidth: number;
+  align: any;
+  sourceWidth: number;
+}
+
+class Test extends Component<{}, TestState> {
   state = {
     monitor: true,
     random: false,
@@ -14,6 +23,10 @@ class Test extends Component {
     },
     sourceWidth: 50,
   };
+
+  id: NodeJS.Timer;
+  $container: HTMLElement;
+  $align: RefAlign;
 
   componentDidMount() {
     this.id = setInterval(() => {

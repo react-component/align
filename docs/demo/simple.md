@@ -1,3 +1,8 @@
-## Simple
+---
+title: Simple
+nav:
+  title: Demo
+  path: /demo
+---
 
-<code src="../examples/simple.js" />
+<code src="../examples/simple.tsx" ></code>

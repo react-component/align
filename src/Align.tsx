@@ -68,7 +68,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   forceAlignPropsRef.current.align = align;
   forceAlignPropsRef.current.onAlign = onAlign;
 
-  const [forceAlign, cancelForceAlign] = useBuffer((force) => {
+  const [forceAlign, cancelForceAlign] = useBuffer(() => {
     const {
       disabled: latestDisabled,
       target: latestTarget,
@@ -184,7 +184,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
 
   // ===================== Render =====================
   if (React.isValidElement(childNode)) {
-    childNode = React.cloneElement(childNode, {
+    childNode = React.cloneElement<any>(childNode, {
       ref: composeRef((childNode as any).ref, nodeRef),
     });
   }
