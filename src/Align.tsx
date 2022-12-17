@@ -7,6 +7,7 @@ import { alignElement, alignPoint } from 'dom-align';
 import isEqual from 'lodash/isEqual';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isVisible from 'rc-util/lib/Dom/isVisible';
+import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import React from 'react';
 
@@ -109,8 +110,13 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
 
   // ===================== Effect =====================
   // Handle props change
-  const element = getElement(target);
-  const point = getPoint(target);
+  const [element, setElement] = React.useState<HTMLElement>();
+  const [point, setPoint] = React.useState<TargetPoint>();
+
+  useLayoutEffect(() => {
+    setElement(getElement(target));
+    setPoint(getPoint(target));
+  });
 
   React.useEffect(() => {
     if (

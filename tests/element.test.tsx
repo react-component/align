@@ -1,7 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import { act, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { spyElementPrototype } from 'rc-util/lib/test/domHook';
 import React from 'react';
+import { renderToString } from 'react-dom/server';
 import Align from '../src';
 
 describe('element align', () => {
@@ -144,6 +145,18 @@ describe('element align', () => {
 
     expect(onAlign1).not.toHaveBeenCalled();
     expect(onAlign2).toHaveBeenCalled();
+  });
+
+  it('SSR no break', () => {
+    const str = renderToString(
+      <Test
+        align={{ points: ['cc', 'cc'] }}
+        target={() => {
+          throw new Error('Not Call In Render');
+        }}
+      />,
+    );
+    expect(str).toBeTruthy();
   });
 });
 /* eslint-enable */
