@@ -4,7 +4,7 @@
  */
 
 import { alignElement, alignPoint } from 'dom-align';
-import isEqual from 'rc-util/lib/isEqual';
+import isEqual from 'lodash/isEqual';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isVisible from 'rc-util/lib/Dom/isVisible';
 import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
