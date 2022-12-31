@@ -116,7 +116,8 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
   useLayoutEffect(() => {
     setElement(getElement(target));
     setPoint(getPoint(target));
-  });
+    // fix: https://github.com/ant-design/ant-design/issues/39921
+  }, [target]);
 
   React.useEffect(() => {
     if (
