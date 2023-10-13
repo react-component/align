@@ -1,7 +1,7 @@
 # rc-align
 ---
 
-React Align Component. Wrapper around https://github.com/yiminghe/dom-align.
+React Align Component. Wrapper around https://github.com/react-component/dom-align.
 
 [![NPM version][npm-image]][npm-url]
 [![build status][github-actions-image]][github-actions-url]
@@ -78,7 +78,7 @@ will align child with target when mounted or align is changed
           <td>align</td>
           <td>Object</td>
           <td></td>
-          <td>same with alignConfig from https://github.com/yiminghe/dom-align</td>
+          <td>same with alignConfig from https://github.com/react-component/dom-align</td>
         </tr>
         <tr>
           <td>onAlign</td>
@@ -95,7 +95,7 @@ will align child with target when mounted or align is changed
           </td>
           <td>function(){return window;}</td>
           <td>
-            a function which returned value or point is used for target from https://github.com/yiminghe/dom-align
+            a function which returned value or point is used for target from https://github.com/react-component/dom-align
         </td>
         </tr>
         <tr>

@@ -3,7 +3,7 @@
  *  - childrenProps
  */
 
-import { alignElement, alignPoint } from 'dom-align';
+import { alignElement, alignPoint } from '@rc-component/dom-align';
 import isEqual from 'rc-util/lib/isEqual';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import isVisible from 'rc-util/lib/Dom/isVisible';
