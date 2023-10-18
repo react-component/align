@@ -20,10 +20,12 @@ export interface AlignType {
   /**
    * If adjustX field is true, will adjust source node in x direction if source node is invisible.
    * If adjustY field is true, will adjust source node in y direction if source node is invisible.
+   * If alwaysByViewport is true, the it will adjust if node is not inside viewport.
    */
   overflow?: {
     adjustX?: boolean | number;
     adjustY?: boolean | number;
+    alwaysByViewport?: boolean;
   };
   /**
    * Whether use css right instead of left to position
