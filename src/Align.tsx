@@ -90,7 +90,7 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
       const { activeElement } = document;
 
       // We only align when element is visible
-      if (element && isVisible(element)) {
+      if (element && isVisible(source) && isVisible(element)) {
         result = alignElement(source, element, latestAlign);
       } else if (point) {
         result = alignPoint(source, point, latestAlign);
