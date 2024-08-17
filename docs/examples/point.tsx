@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import type { RefAlign } from '../../src';
 import Align from '../../src';
 
 const align = {
@@ -6,6 +7,8 @@ const align = {
 };
 
 class Demo extends Component {
+  alignRef = React.createRef<RefAlign>();
+
   state = {
     point: null,
   };
