@@ -148,6 +148,30 @@ const Align: React.ForwardRefRenderFunction<RefAlign, AlignProps> = (
       cancelForceAlign();
     }
   }, [disabled]);
+  
+  // listen scroll event
+  const scrollObserveRef = React.useRef<{ remove: () => void }>();
+  React.useEffect(() => {
+    const element = getElement(target);
+    if (!element) return;
+    const listener = e => {
+      if (typeof e.target.contains === 'function') {
+        if (e.target.contains(element)) {
+          forceAlign();
+        }
+      }
+    };
+    window.addEventListener('scroll', listener, true);
+    scrollObserveRef.current = {
+      remove: () => {
+        window.removeEventListener('scroll', listener);
+      },
+    };
+    return () => {
+      scrollObserveRef.current && scrollObserveRef.current.remove();
+      scrollObserveRef.current = null;
+    };
+  }, [target]);
 
   // Listen for window resize
   React.useEffect(() => {
